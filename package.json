@@ -26,6 +26,8 @@
         "datatables.net": "^1.10.20",
         "datatables.net-bs4": "^1.10.20",
         "datatables.net-dt": "^1.10.20",
-        "font-awesome": "^4.7.0"
+        "font-awesome": "^4.7.0",
+        "select2": "^4.0.13",
+        "select2-theme-bootstrap4": "^0.2.0-beta.6"
     }
 }

@@ -9,3 +9,4 @@ require('./bootstrap');
 window.$ = window.jQuery = $;
 import $ from 'jquery';
 import "datatables.net-bs4";
+import "select2";
