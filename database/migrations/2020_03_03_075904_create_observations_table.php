@@ -2,9 +2,10 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateObservationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +14,15 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('observations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('username');
-            $table->string('password');
-            $table->rememberToken();
+            $table->text('description')->comment('Descripcion');
+            $table->unsignedBigInteger('product_id')->comment('Producto_id');
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement("ALTER TABLE `observations` comment 'Observaciones'");
     }
 
     /**
@@ -30,6 +32,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('observations');
     }
 }
