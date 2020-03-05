@@ -16,6 +16,7 @@ class Relations2 extends Migration
         Schema::table('repairs', function (Blueprint $table)
         {
             $table->foreign('business_id')->references('id')->on('businesses');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -29,6 +30,7 @@ class Relations2 extends Migration
         Schema::table('repairs', function (Blueprint $table)
         {
             $table->dropForeign(['business_id']);
+            $table->dropForeign(['user_id']);
         });
     }
 }
