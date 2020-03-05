@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Exits extends Model
 {
+    protected $table = 'exits';
     /*
     |--------------------------------------------------------------------------
     | RELATIONSHIPS
