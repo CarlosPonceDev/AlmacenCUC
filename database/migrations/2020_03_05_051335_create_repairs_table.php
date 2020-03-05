@@ -19,9 +19,9 @@ class CreateRepairsTable extends Migration
             $table->text('description')->comment('Descripcion');
             $table->string('product_id')->comment('Producto_id');
             $table->text('reason')->comment('Motivo');
-            $table->string('personal')->nullable()->comment('Personal');
             $table->timestamp('exit_date')->nullable()->comment('Fecha de salida');
             $table->timestamp('delivery_date')->nullable()->comment('Fecha de entrega');
+            $table->unsignedBigInteger('personal_id')->nullable()->comment('Personal_id');
             $table->unsignedBigInteger('business_id')->comment('Empresa_id');
             $table->unsignedBigInteger('user_id')->comment('Usuario_id');
             $table->timestamps();
