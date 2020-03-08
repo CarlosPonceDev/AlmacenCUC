@@ -11,3 +11,5 @@ import $ from 'jquery';
 import "datatables.net-bs4";
 import "select2";
 import "awesome-notifications";
+
+$('.select2').select2();

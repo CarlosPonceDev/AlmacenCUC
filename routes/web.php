@@ -14,3 +14,6 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('dashboard');
+Route::resources([
+  'entradas' => 'EntriesController'
+]);
