@@ -10,6 +10,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>
         Entradas
       </a>
+      <a class="nav-link" href="{{ route('salidas.index') }}">
+        <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+        Salidas
+      </a>
     </div>
   </div>
   <div class="sb-sidenav-footer">
