@@ -18,6 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->comment('Nombre');
             $table->string('description')->comment('Descripcion');
+            $table->string('prefix')->comment('Prefijo');
             $table->timestamps();
             $table->softDeletes();
         });

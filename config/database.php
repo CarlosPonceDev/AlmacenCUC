@@ -63,6 +63,26 @@ return [
             ]) : [],
         ],
 
+        'old' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('ALMACENCUC_HOST', '127.0.0.1'),
+            'port' => env('ALMACENCUC_PORT', '3306'),
+            'database' => env('ALMACENCUC_DATABASE', 'forge'),
+            'username' => env('ALMACENCUC_USERNAME', 'forge'),
+            'password' => env('ALMACENCUC_PASSWORD', ''),
+            'unix_socket' => env('ALMACENCUC_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
