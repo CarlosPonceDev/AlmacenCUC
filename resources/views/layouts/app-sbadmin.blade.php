@@ -23,7 +23,9 @@
 
     <div id="layoutSidenav_content">
       <main>
-        @yield('content')
+        <div class="container p-5">
+          @yield('content')
+        </div>
       </main>
       @includeIf('include.footer')
     </div>
