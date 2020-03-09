@@ -18,5 +18,6 @@ Route::resources([
   'entradas'    => 'EntriesController',
   'salidas'     => 'ExitsController',
   'categorias'  => 'CategoriesController',
-  'inventario'  => 'InventoryController'
+  'inventario'  => 'InventoryController',
+  'reportes'    => 'ReportsController',
 ]);
