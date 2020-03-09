@@ -17,3 +17,12 @@ if ( ! function_exists('replaceSpecialCharacters')) {
         return $name;
     }
 }
+
+if ( ! function_exists('isEmptyString')) {
+    function isEmptyString($string)
+    {
+        $string = $string == null ? '' : $string;
+        $string = preg_replace('/\s+/', '', $string);
+        return $string == '';
+    }
+}

@@ -58685,9 +58685,12 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.$ = window.jQuery = jquery__WEBPACK_IMPORTED_MODULE_0___default.a;
 
 
+ // import 'awesome-notifications';
 
 
 jquery__WEBPACK_IMPORTED_MODULE_0___default()('.select2').select2();
+var notifier = new awesome_notifications__WEBPACK_IMPORTED_MODULE_3___default.a();
+window.notifier = notifier;
 
 /***/ }),
 

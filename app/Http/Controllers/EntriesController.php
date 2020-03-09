@@ -2,6 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Place;
+use App\Provider;
+use App\Category;
+use App\Unit;
+use App\Entry;
+use App\Inventory;
+use App\Observation;
+use App\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EntriesController extends Controller
@@ -13,7 +22,7 @@ class EntriesController extends Controller
      */
     public function index()
     {
-        return view('entries.index');
+        //
     }
 
     /**
@@ -23,7 +32,11 @@ class EntriesController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        $places = Place::all();
+        $providers = Provider::all();
+        $units = Unit::all();
+        return view('entries.index', compact(['categories', 'places', 'providers', 'units']));
     }
 
     /**
@@ -34,7 +47,72 @@ class EntriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'stock' => 'required|numeric',
+            'bill'  => 'required|string'
+        ]);
+        $category = Category::where('name', $request->input('category'))->first();
+        $unit = Unit::where('name', $request->input('unit'))->first();
+        $place = Place::where('name', $request->input('place'))->first();
+        $provider = Provider::where('id', $request->input('provider'))->first();
+        if ($category && $unit && $place && $provider) {
+            if ($request->input('code') == null) {
+                $request->validate([
+                    'description'  => 'required|string'
+                ]);
+
+                $code = Product::where('category_id', $category->id)->orderBy('code', 'desc')->first()->code;
+                $product = new Product;
+                $product->code = $code + 1;
+                $product->description = $request->input('description');
+                $product->category_id = $category->id;
+                $product->save();
+
+                $inventory = new Inventory();
+                $inventory->initial_stock = 0;
+                if (isEmptyString($request->input('minimum'))) {
+                    $inventory->minimum = 0;
+                } else {
+                    $inventory->minimum = $request->input('minimum');
+                }
+                $inventory->product_id = $product->id;
+                $inventory->save();
+            } else {
+                $request->validate([
+                    'code'  => 'required|string',
+                    'description'  => 'required|string'
+                ]);
+
+                $product = Product::where('category_id', $category->id)->where('code', substr($request->input('code'), 1))->first();
+                if (!$product) {
+                    return abort('404');
+                }
+            }
+
+            $entry = new Entry();
+            $entry->date = Carbon::now()->format('Y-m-d H:i:s');
+            $entry->quantity = $request->input('stock');
+            $entry->bill = $request->input('bill');
+            $entry->unit_id = $unit->id;
+            $entry->place_id = $place->id;
+
+            if (!isEmptyString($request->observations)) {
+                $observation = new Observation();
+                $observation->description = $request->observations;
+                $observation->product_id = $product->id;
+                $observation->save();
+
+                $entry->observation_id = $observation->id;
+            }
+
+            $entry->provider_id = $provider->id;
+            $entry->product_id = $product->id;
+            $entry->user_id = auth()->user()->id;
+            $entry->save();
+        } else {
+            return abort('404');
+        }
+        return redirect()->route('entradas.create')->with('success', '¡Entrada guardada con éxito!');
     }
 
     /**

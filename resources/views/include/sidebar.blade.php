@@ -6,7 +6,7 @@
         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
         Inicio
       </a>
-      <a class="nav-link" href="{{ route('entradas.index') }}">
+      <a class="nav-link" href="{{ route('entradas.create') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>
         Entradas
       </a>
