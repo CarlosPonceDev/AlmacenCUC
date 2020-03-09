@@ -58688,7 +58688,6 @@ window.$ = window.jQuery = jquery__WEBPACK_IMPORTED_MODULE_0___default.a;
 
 
 jquery__WEBPACK_IMPORTED_MODULE_0___default()('.select2').select2();
-jquery__WEBPACK_IMPORTED_MODULE_0___default()('.datatable').DataTable();
 
 /***/ }),
 

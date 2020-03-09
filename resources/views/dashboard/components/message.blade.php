@@ -1,0 +1,1 @@
+<span class="badge badge-{{ $color }} w-100">{{ $message }}</span>

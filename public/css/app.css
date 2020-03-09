@@ -19219,3 +19219,7 @@ readers do not read off random characters that represent icons */
   box-sizing: border-box;
 }
 
+.dataTables_wrapper {
+  width: 100%;
+}
+

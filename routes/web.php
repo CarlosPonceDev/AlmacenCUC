@@ -14,6 +14,10 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('dashboard');
+Route::prefix('laratables')->group(function ()
+{
+  Route::get('minimum', 'HomeController@laratables')->name('laratables.minimum');
+});
 Route::resources([
   'entradas'    => 'EntriesController',
   'salidas'     => 'ExitsController',
