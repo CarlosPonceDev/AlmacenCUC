@@ -26,6 +26,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
         Reportes
       </a>
+      <a class="nav-link" href="{{ route('empleados.index') }}">
+        <div class="sb-nav-link-icon"><i class="fas fa-user-friends"></i></div>
+        Empleados
+      </a>
     </div>
   </div>
   <div class="sb-sidenav-footer">

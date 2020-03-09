@@ -20,4 +20,5 @@ Route::resources([
   'categorias'  => 'CategoriesController',
   'inventario'  => 'InventoryController',
   'reportes'    => 'ReportsController',
+  'empleados'   => 'EmployeesController',
 ]);
