@@ -69,10 +69,6 @@ class MigrateProducts extends Command
                 ];
                 $insertar_inventario[] = [
                     'initial_stock'     => $producto->stock_inicial,
-                    'cuc_stock'         => $producto->stock_cuc,
-                    'tomatlan_stock'    => $producto->stock_tomatlan,
-                    'gourmet_stock'     => $producto->stock_gourmet,
-                    'others_stock'      => $producto->stock_otros,
                     'minimum'           => $producto->minima,
                     'product_id'        => $i,
                     'created_at'        => Carbon::now()->format('Y-m-d H:i:s'),

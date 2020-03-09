@@ -6,21 +6,21 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class MigratePersonals extends Command
+class MigarteEmployees extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:personals';
+    protected $signature = 'migrate:employees';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Migrate the personals from the old database to the new database';
+    protected $description = 'Migrate the employees from the old database to the new database';
 
     /**
      * Create a new command instance.

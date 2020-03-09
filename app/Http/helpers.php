@@ -10,6 +10,7 @@ if ( ! function_exists('replaceSpecialCharacters')) {
             'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y'
         );
         $name = strtr( $description, $unwanted_array );
+        $name = str_replace('´', '', $name);
         $name = strtolower($name);
         $name = preg_replace('/\s+/', '-', $name);
         $name = str_replace('.', '', $name);

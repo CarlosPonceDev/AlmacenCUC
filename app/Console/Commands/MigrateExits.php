@@ -6,21 +6,21 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class MigrateEntries extends Command
+class MigrateExits extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:entries';
+    protected $signature = 'migrate:exits';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Migrate the entries from the old database to the new database';
+    protected $description = 'Migrate the exits from the old database to the new database';
 
     /**
      * Create a new command instance.
@@ -44,24 +44,22 @@ class MigrateEntries extends Command
 
         $insertar = [];
         $lost = [];
-        
-        $observation_id = null;
 
-        $entradas = $old->table('tbl_entradas')->get();
+        $salidas = $old->table('tbl_salidas')->get();
 
-        foreach ($entradas as $entrada) {
-            $product = $mysql->table('products')->where('description', $entrada->descripcion_producto)->first();
+        foreach ($salidas as $salida) {
+            $product = $mysql->table('products')->where('description', $salida->descripcion_producto)->first();
             if (!$product) {
                 $lost[] = [
-                    'info'  => json_encode($entrada),
-                    'table' => 'tbl_entradas'
+                    'info'  => json_encode($salida),
+                    'table' => 'tbl_salidas'
                 ];
             } else {
-                $unit = $mysql->table('units')->where('name', replaceSpecialCharacters($entrada->unidad_entrada))->first();
+                $unit = $mysql->table('units')->where('name', replaceSpecialCharacters($salida->unidad_salida))->first();
                 if (!$unit) {
                     $unit_id = $mysql->table('units')->insertGetId([
-                        'name'          => replaceSpecialCharacters($entrada->unidad_entrada),
-                        'description'   => $entrada->unidad_entrada,
+                        'name'          => replaceSpecialCharacters($salida->unidad_salida),
+                        'description'   => htmlspecialchars($salida->unidad_salida),
                         'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
@@ -69,36 +67,35 @@ class MigrateEntries extends Command
                     $unit_id = $unit->id;
                 }
 
-                $place_id = $mysql->table('places')->where('name', replaceSpecialCharacters($entrada->lugar))->first()->id;
+                $place_id = $mysql->table('places')->where('name', replaceSpecialCharacters($salida->lugar))->first()->id;
 
-                if (preg_replace('/\s+/', '', $entrada->observaciones) != '') {
+                if (preg_replace('/\s+/', '', $salida->observaciones) != '') {
                     $observation_id = $mysql->table('observations')->insertGetId([
-                        'description'   => $entrada->observaciones,
+                        'description'   => htmlspecialchars($salida->observaciones),
                         'product_id'    => $product->id,
-                        'created_at'    => Carbon::parse($entrada->fecha_entrada)->format('Y-m-d H:i:s'),
+                        'created_at'    => Carbon::parse($salida->fecha_salida)->format('Y-m-d H:i:s'),
                         'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
                 }
 
-                $provider = $mysql->table('providers')->where('name', $entrada->proveedor)->first();
-                if (!$provider) {
-                    $provider_id = $mysql->table('providers')->insertGetId([
-                        'name'          => $entrada->proveedor,
+                $employee = $mysql->table('employees')->where('name', $salida->empleado)->first();
+                if (!$employee) {
+                    $employee_id = $mysql->table('employees')->insertGetId([
+                        'name'          => htmlspecialchars($salida->empleado),
                         'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
                 } else {
-                    $provider_id = $provider->id;
+                    $employee_id = $employee->id;
                 }
 
                 $insertar[] = [
-                    'date'          => $entrada->fecha_entrada,
-                    'quantity'      => $entrada->cantidad_entrada,
-                    'bill'          => $entrada->factura,
+                    'date'          => $salida->fecha_salida,
+                    'quantity'      => $salida->cantidad_salida,
                     'unit_id'       => $unit_id,
                     'place_id'      => $place_id,
                     'observation_id'=> $observation_id,
-                    'provider_id'   => $provider_id,
+                    'employee_id'   => $employee_id,
                     'product_id'    => $product->id,
                     'user_id'       => $mysql->table('users')->first()->id,
                     'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
@@ -107,7 +104,7 @@ class MigrateEntries extends Command
             }
         }
 
-        $mysql->table('entries')->insert($insertar);
+        $mysql->table('exits')->insert($insertar);
         $mysql->table('lostrecords')->insert($lost);
     }
 }
