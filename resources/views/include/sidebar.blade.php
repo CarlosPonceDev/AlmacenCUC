@@ -14,6 +14,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
         Salidas
       </a>
+      <a class="nav-link" href="{{ route('categorias.index') }}">
+        <div class="sb-nav-link-icon"><i class="fas fa-th"></i></div>
+        Categorías
+      </a>
     </div>
   </div>
   <div class="sb-sidenav-footer">

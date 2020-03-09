@@ -15,6 +15,7 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('dashboard');
 Route::resources([
-  'entradas' => 'EntriesController',
-  'salidas' => 'ExitsController'
+  'entradas'    => 'EntriesController',
+  'salidas'     => 'ExitsController',
+  'categorias'  => 'CategoriesController'
 ]);
