@@ -17,5 +17,6 @@ Route::get('/', 'HomeController@index')->name('dashboard');
 Route::resources([
   'entradas'    => 'EntriesController',
   'salidas'     => 'ExitsController',
-  'categorias'  => 'CategoriesController'
+  'categorias'  => 'CategoriesController',
+  'inventario'  => 'InventoryController'
 ]);

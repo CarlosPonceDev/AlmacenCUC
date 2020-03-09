@@ -18,6 +18,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-th"></i></div>
         Categorías
       </a>
+      <a class="nav-link" href="{{ route('inventario.index') }}">
+        <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
+        Inventario
+      </a>
     </div>
   </div>
   <div class="sb-sidenav-footer">
