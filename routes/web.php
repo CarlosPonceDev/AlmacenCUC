@@ -21,4 +21,5 @@ Route::resources([
   'inventario'  => 'InventoryController',
   'reportes'    => 'ReportsController',
   'empleados'   => 'EmployeesController',
+  'proveedores' => 'ProvidersController',
 ]);

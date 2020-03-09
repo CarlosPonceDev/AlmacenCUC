@@ -30,6 +30,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-user-friends"></i></div>
         Empleados
       </a>
+      <a class="nav-link" href="{{ route('proveedores.index') }}">
+        <div class="sb-nav-link-icon"><i class="fas fa-people-carry"></i></div>
+        Proveedores
+      </a>
     </div>
   </div>
   <div class="sb-sidenav-footer">
