@@ -22,4 +22,5 @@ Route::resources([
   'reportes'    => 'ReportsController',
   'empleados'   => 'EmployeesController',
   'proveedores' => 'ProvidersController',
+  'reparaciones'=> 'RepairsController',
 ]);

@@ -34,6 +34,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-people-carry"></i></div>
         Proveedores
       </a>
+      <a class="nav-link" href="{{ route('reparaciones.index') }}">
+        <div class="sb-nav-link-icon"><i class="fas fa-toolbox"></i></div>
+        Reparaciones
+      </a>
     </div>
   </div>
   <div class="sb-sidenav-footer">
