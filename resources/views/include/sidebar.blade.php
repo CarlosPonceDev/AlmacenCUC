@@ -10,7 +10,7 @@
         <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>
         Entradas
       </a>
-      <a class="nav-link" href="{{ route('salidas.index') }}">
+      <a class="nav-link" href="{{ route('salidas.create') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
         Salidas
       </a>

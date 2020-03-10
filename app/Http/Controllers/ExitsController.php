@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Place;
+use App\Employee;
+use App\Unit;
 use Illuminate\Http\Request;
 
 class ExitsController extends Controller
@@ -13,7 +16,7 @@ class ExitsController extends Controller
      */
     public function index()
     {
-        return view('exits.index');
+        //
     }
 
     /**
@@ -23,7 +26,10 @@ class ExitsController extends Controller
      */
     public function create()
     {
-        //
+        $employees = Employee::all();
+        $units = Unit::all();
+        $places = Place::all();
+        return view('exits.index', compact(['employees', 'units', 'places']));
     }
 
     /**
