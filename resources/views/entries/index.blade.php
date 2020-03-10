@@ -14,7 +14,7 @@
           </div>
           <div class="col-2">
             <label for="code">Código:</label>
-            <input type="text" name="code" id="code" class="form-control text-uppercase" placeholder="Código..." autofocus>
+            <input type="text" name="code" id="code" class="form-control text-uppercase" placeholder="Código..." autofocus autocomplete="off">
           </div>
           <div class="col-7">
             <label for="description">Descripción:</label>
@@ -31,8 +31,8 @@
             </select>
           </div>
           <div class="col-2">
-            <label for="stock">Cantidad:</label>
-            <input type="text" name="stock" id="stock" class="form-control">
+            <label for="quantity">Cantidad:</label>
+            <input type="text" name="quantity" id="quantity" class="form-control">
           </div>
           <div class="col-3">
             <label for="unit">Unidad:</label>
@@ -77,7 +77,7 @@
         </div>
         <div class="row mt-4">
           <div class="col">
-            <button type="submit" class="btn btn-lg btn-block btn-primary">Guadar entrada</button>
+            <button type="submit" id="save" class="btn btn-lg btn-block btn-primary">Guadar entrada</button>
           </div>
         </div>
       </form>
@@ -92,6 +92,136 @@
             $('body').prepend('<div class="loader"></div>');
             e.submit();
         });
+        function navigate(keyCode, left = null, right = null, up = null, down = null) {
+          switch(keyCode) {
+              case UP:
+                if (up != null) {
+                  if (up == 'provider') {
+                    $('#' + up).select2('focus');
+                  } else {
+                    $('#' + up).focus();
+                  }
+                }
+              break;
+
+              case DOWN:
+                if (down != null) {
+                  if (down == 'provider') {
+                    $('#' + down).select2('focus');
+                  } else {
+                    $('#' + down).focus();
+                  }
+                }
+              break;
+
+              case LEFT:
+                if (left != null) {
+                  if (left == 'provider') {
+                    $('#' + left).select2('focus');
+                  } else {
+                    $('#' + left).focus();
+                  }
+                }
+              break;
+
+              case RIGHT: case TAB:
+                if (right != null) {
+                  if (right == 'provider') {
+                    $('#' + right).select2('focus');
+                  } else {
+                    $('#' + right).focus();
+                  }
+                }
+              break;
+
+              default: return;
+            }
+        }
+
+        $('#date').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, null, 'code', null, 'category');
+          }
+        });
+
+        $('#code').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'date', 'description', null, 'category');
+          }
+        });
+
+        $('#description').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'code', 'category', null, 'quantity');
+          }
+        });
+
+        $('#category').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'description', 'quantity', 'date', 'provider');
+          }
+        });
+
+        $('#quantity').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'category', 'unit', 'description', 'bill');
+          }
+        });
+
+        $('#unit').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'quantity', 'minimum', 'description', 'bill');
+          }
+        });
+
+        $('#minimum').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'unit', 'provider', 'description', 'place');
+          }
+        });
+
+        $('#provider').next('.select2-container').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'minimum', 'bill', 'category', 'observations');
+          }
+        });
+
+        $('#bill').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'provider', 'place', 'quantity', 'observations');
+          }
+        });
+
+        $('#place').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'bill', 'observations', 'minimum', 'observations');
+          }
+        });
+
+        $('#observations').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'place', 'save', 'provider', 'save');
+          }
+        });
+
+        $('#save').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'observations', null, 'observations', null);
+          }
+        });
+
         @if (Session::has('success'))
           notifier.success('{{ Session::get("success") }}', {
             labels: {

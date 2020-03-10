@@ -34,6 +34,14 @@
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
   <script src="{{ asset('js/SBAdmin.js') }}" defer></script>
+  <script>
+    const LEFT  = 37;
+    const UP    = 38;
+    const RIGHT = 39;
+    const DOWN  = 40;
+    const ENTER = 13;
+    const TAB   = 9;
+  </script>
   @stack('inline-scripts')
 </body>
 </html>

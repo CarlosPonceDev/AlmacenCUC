@@ -48,7 +48,7 @@ class EntriesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'stock' => 'required|numeric',
+            'quantity' => 'required|numeric',
             'bill'  => 'required|string'
         ]);
         $category = Category::where('name', $request->input('category'))->first();
@@ -91,7 +91,7 @@ class EntriesController extends Controller
 
             $entry = new Entry();
             $entry->date = Carbon::now()->format('Y-m-d H:i:s');
-            $entry->quantity = $request->input('stock');
+            $entry->quantity = $request->input('quantity');
             $entry->bill = $request->input('bill');
             $entry->unit_id = $unit->id;
             $entry->place_id = $place->id;
