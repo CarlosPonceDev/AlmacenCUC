@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('code')->comment('Codigo');
             $table->text('description')->comment('Descripcion');
+            $table->unsignedBigInteger('unit_id')->nullable()->comment('Unidad_id');
             $table->unsignedBigInteger('category_id')->comment('Categoria_id');
             $table->timestamps();
             $table->softDeletes();

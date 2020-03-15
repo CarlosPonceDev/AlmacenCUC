@@ -44,6 +44,7 @@ class MigrateProducts extends Command
         $insertar = [];
         $insertar_inventario = [];
         $lost = [];
+        $unit_id = null;
 
         $inventario = $old->table('tbl_inventario')->get();
 
@@ -54,6 +55,19 @@ class MigrateProducts extends Command
         }
         $i = 1;
         foreach ($inventario as $producto) {
+            if (preg_replace('/\s+/', '', $producto->unidad) != '') {
+                $unit = $mysql->table('units')->where('name', replaceSpecialCharacters($producto->unidad))->first();
+                if (!$unit) {
+                    $unit_id = $mysql->table('units')->insertGetId([
+                        'name'          => replaceSpecialCharacters($producto->unidad),
+                        'description'   => htmlspecialchars($producto->unidad),
+                        'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+                        'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+                } else {
+                    $unit_id = $unit->id;
+                }
+            }
             if (array_key_exists($producto->descripcion_producto, $insertar)) {
                 $lost[] = [
                     'info'  => json_encode($producto),
@@ -63,6 +77,7 @@ class MigrateProducts extends Command
                 $insertar[$producto->descripcion_producto] = [
                     'code'          => substr($producto->codigo_producto, 1),
                     'description'   => htmlspecialchars($producto->descripcion_producto),
+                    'unit_id'       => $unit_id,
                     'category_id'   => $categorias[substr($producto->codigo_producto, 0, 1)],
                     'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')

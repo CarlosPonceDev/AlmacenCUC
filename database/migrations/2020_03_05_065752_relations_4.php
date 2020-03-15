@@ -15,6 +15,7 @@ class Relations4 extends Migration
     {
         Schema::table('products', function (Blueprint $table)
         {
+            $table->foreign('unit_id')->references('id')->on('units');
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }
@@ -28,6 +29,7 @@ class Relations4 extends Migration
     {
         Schema::table('products', function (Blueprint $table)
         {
+            $table->dropForeign(['unit_id']);
             $table->dropForeign(['category_id']);
         });
     }

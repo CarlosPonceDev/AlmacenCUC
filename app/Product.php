@@ -31,6 +31,11 @@ class Product extends Model
         return $this->hasOne(Inventory::class);
     }
 
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
