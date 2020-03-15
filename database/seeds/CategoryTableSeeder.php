@@ -68,7 +68,7 @@ class CategoryTableSeeder extends Seeder
         $category->prefix = 'P';
         $category->save();
         
-        $category_name = 'Material de servicio';
+        $category_name = 'Equipo de servicio';
         $category = new Category();
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
