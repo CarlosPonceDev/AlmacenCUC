@@ -45,6 +45,8 @@ class MigrateExits extends Command
         $insertar = [];
         $lost = [];
 
+        $observation_id = null;
+
         $salidas = $old->table('tbl_salidas')->get();
 
         foreach ($salidas as $salida) {
