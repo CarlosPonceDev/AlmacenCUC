@@ -18,6 +18,14 @@ class CreateInventoryView extends Migration
         (SELECT 
             p.id,
             p.description,
+            CONCAT(
+                (
+                    SELECT ca.prefix
+                    FROM categories ca
+                    WHERE ca.id = p.category_id
+                ), 
+                p.code
+            ) AS code,
             (
                 SELECT c.description
                 FROM categories c
@@ -36,7 +44,7 @@ class CreateInventoryView extends Migration
                         AND en.place_id = (
                         SELECT pl.id
                         FROM places pl
-                        WHERE name LIKE '%cucosta%'
+                        WHERE name LIKE '%cuc%'
                     )
                 ) -
                 (
@@ -96,7 +104,7 @@ class CreateInventoryView extends Migration
                     AND en.place_id = (
                         SELECT pl.id
                         FROM places pl
-                        WHERE name LIKE '%cucosta%'
+                        WHERE name LIKE '%cuc%'
                     )
             ) AS entries,
             (
