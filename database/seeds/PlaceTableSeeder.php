@@ -12,9 +12,9 @@ class PlaceTableSeeder extends Seeder
      */
     public function run()
     {
-        $place_name = 'Centro Universitario de la Costa';
+        $place_name = 'CUCOSTA';
         $place = new Place();
-        $place->name = 'cuc';
+        $place->name = replaceSpecialCharacters($place_name);
         $place->description = $place_name;
         $place->save();
 
