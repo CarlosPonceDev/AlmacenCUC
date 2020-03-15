@@ -36,7 +36,7 @@ class EntriesController extends Controller
         $places = Place::all();
         $providers = Provider::all();
         $units = Unit::all();
-        return view('entries.index', compact(['categories', 'places', 'providers', 'units']));
+        return view('entries.create', compact(['categories', 'places', 'providers', 'units']));
     }
 
     /**
@@ -158,5 +158,16 @@ class EntriesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function fetchCode(Request $request)
+    {
+        $code = $request->input('code');
+        if (strlen($code) > 1) {
+            $category = Category::where('prefix', substr($code, 0, 1))->first();
+            if ($category) {
+            }
+        }
+        return null;
     }
 }

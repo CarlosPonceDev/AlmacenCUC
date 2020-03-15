@@ -18,6 +18,10 @@ Route::prefix('laratables')->group(function ()
 {
   Route::get('minimum', 'HomeController@laratables')->name('laratables.minimum');
 });
+Route::prefix('fetch')->group(function ()
+{
+  Route::get('code/entry', 'EntriesController@fetchCode')->name('entry.fetch.code');
+});
 Route::resources([
   'entradas'    => 'EntriesController',
   'salidas'     => 'ExitsController',

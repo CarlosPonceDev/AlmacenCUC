@@ -88,6 +88,9 @@
 @push('inline-scripts')
     <script>
       window.onload = function(){
+        var $input = $('#code');
+        var doneTypingTimer = 1000;
+        var typingTimer;
         $('form').submit(function (e) {
             $('body').prepend('<div class="loader"></div>');
             e.submit();
@@ -138,6 +141,26 @@
             }
         }
 
+        function doneTyping() {
+          $.ajax({
+            method: 'GET',
+            url: '{{ route("entry.fetch.code") }}',
+            data: {
+              "_token": "{{ csrf_token() }}",
+              "code":   $input.val()
+            },
+            beforeSend: function () {
+              $("label[for=description]").append('<div class="spinner-border spinner-border-sm text-success" school="status"><span class="sr-only">Cargando...</span></div>');
+            },
+            complete: function () {
+              $("label[for=description] .spinner-border").remove();
+            }
+          })
+          .done(function (data) {
+            console.log(data);
+          });
+        }
+
         $('#date').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
@@ -146,10 +169,17 @@
         });
 
         $('#code').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+          var keyCode = e.keyCode || e.which;
+          if (keyCode == LEFT || keyCode == UP || keyCode == RIGHT || keyCode == DOWN || keyCode == ENTER || keyCode == TAB) {
             e.preventDefault();
-            navigate(e.which, 'date', 'description', null, 'category');
+            navigate(keyCode, 'date', 'description', null, 'category');
+          } else {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(doneTyping, doneTypingTimer);
           }
+        }).focusout(function () {
+          clearTimeout(typingTimer);
+          doneTyping();
         });
 
         $('#description').keydown(function (e) {
