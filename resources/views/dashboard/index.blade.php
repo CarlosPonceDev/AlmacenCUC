@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <div class="row my-5">
+  <div class="row my-5 table-responsive">
     <table class="table table-hover w-100" id="table-minimum">
       <thead class="thead-dark">
         <tr>
