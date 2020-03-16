@@ -15,12 +15,46 @@ class CreateMinimumView extends Migration
     public function up()
     {
         DB::statement("CREATE VIEW minimum AS
-        (select p.id as id, p.description, i.minimum, (i.initial_stock + IF(e.place_id = 1, e.quantity, 0) - IF(ex.place_id != 1, ex.quantity, 0)) as total
-        from products p INNER JOIN inventory i on i.product_id = p.id
-        INNER JOIN entries e on e.product_id = p.id
-        INNER JOIN exits ex on ex.product_id = p.id
-        GROUP BY p.description
-        HAVING total < i.minimum)");
+        (SELECT
+            p.id,
+            p.description,
+            CONCAT(
+                (
+                    SELECT ca.prefix
+                    FROM categories ca
+                    WHERE ca.id = p.category_id
+                ), 
+                p.code
+            ) AS code,
+            (
+                SELECT i.minimum
+                FROM inventory i
+                WHERE i.product_id = p.id
+            ) AS minimum,
+            (
+                (
+                    SELECT i.initial_stock
+                    FROM inventory i
+                    WHERE i.product_id = p.id
+                ) +
+                (
+                    SELECT IF(IFNULL(SUM(en.quantity), 0) = 0, 0, SUM(en.quantity))
+                    FROM entries en
+                    WHERE en.product_id = p.id
+                        AND en.place_id = (
+                        SELECT pl.id
+                        FROM places pl
+                        WHERE name LIKE '%cuc%'
+                    )
+                ) -
+                (
+                    SELECT IF(IFNULL(SUM(ex.quantity), 0) = 0, 0, SUM(ex.quantity))
+                    FROM exits ex
+                    WHERE ex.product_id = p.id
+                )
+            ) AS total
+        FROM products p
+        HAVING total < minimum)");
     }
 
     /**
