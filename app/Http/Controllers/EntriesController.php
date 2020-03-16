@@ -10,6 +10,7 @@ use App\Entry;
 use App\Inventory;
 use App\Observation;
 use App\Product;
+use App\ViewInventory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -166,6 +167,10 @@ class EntriesController extends Controller
         if (strlen($code) > 1) {
             $category = Category::where('prefix', substr($code, 0, 1))->first();
             if ($category) {
+                $product = Product::with('category')->with('unit')->with('inventory')->where('code', substr($code, 1))->where('category_id', $category->id)->first();
+                if ($product) {
+                    return response()->json(['product' => $product]);
+                }
             }
         }
         return null;

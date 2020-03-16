@@ -48,6 +48,7 @@
       <thead class="thead-dark">
         <tr>
           <th>Descripción</th>
+          <th>Código</th>
           <th>Cantidad</th>
           <th>Estado</th>
         </tr>
@@ -64,6 +65,7 @@
           ajax: "{{ route('laratables.minimum') }}",
           columns: [
             { name: 'description' },
+            { name: 'code' },
             { name: 'total' },
             { name: 'action', orderable: false, searchable: false },
           ]

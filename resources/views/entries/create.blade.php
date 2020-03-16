@@ -141,7 +141,7 @@
             }
         }
 
-        function doneTyping() {
+        function doneTypingCode() {
           $.ajax({
             method: 'GET',
             url: '{{ route("entry.fetch.code") }}',
@@ -150,14 +150,29 @@
               "code":   $input.val()
             },
             beforeSend: function () {
-              $("label[for=description]").append('<div class="spinner-border spinner-border-sm text-success" school="status"><span class="sr-only">Cargando...</span></div>');
+              $("label[for=code]").append('<div class="spinner-border spinner-border-sm text-success" school="status"><span class="sr-only">Cargando...</span></div>');
             },
             complete: function () {
-              $("label[for=description] .spinner-border").remove();
+              $("label[for=code] .spinner-border").remove();
             }
           })
           .done(function (data) {
-            console.log(data);
+            if (typeof data == 'object' && data != null) {
+              let product = data.product;
+              console.log(product);
+              
+              $('#description').val(product.description); 
+              $('#category').val(product.category.name);
+              $('#category').prop('disabled', true);
+              $('#unit').val(product.unit.name);
+              $('#minimum').val(product.inventory.minimum);
+              $('#minimum').prop('disabled', true);
+            } else {
+              $('#description').val(''); 
+              $('#category').prop('disabled', false);
+              $('#minimum').val('');
+              $('#minimum').prop('disabled', false);
+            }
           });
         }
 
@@ -175,11 +190,11 @@
             navigate(keyCode, 'date', 'description', null, 'category');
           } else {
             clearTimeout(typingTimer);
-            typingTimer = setTimeout(doneTyping, doneTypingTimer);
+            typingTimer = setTimeout(doneTypingCode, doneTypingTimer);
           }
         }).focusout(function () {
           clearTimeout(typingTimer);
-          doneTyping();
+          doneTypingCode();
         });
 
         $('#description').keydown(function (e) {

@@ -16,14 +16,14 @@ class ViewMinimum extends Model
 
     public static function laratablesRowClass($product)
     {
-        return $product->total == 0 ? 'table-danger lead' : 'table-warning lead';
+        return $product->total <= 0 ? 'table-danger lead' : 'table-warning lead';
     }
     
     public static function laratablesCustomAction($product)
     {
         $color = 'warning';
         $message = 'Se está acabando el Stock';
-        if ($product->total == 0) {
+        if ($product->total <= 0) {
             $color = 'danger';
             $message = 'Se terminó el Stock';
         }
