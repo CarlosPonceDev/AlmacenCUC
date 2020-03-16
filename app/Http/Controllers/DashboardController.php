@@ -9,9 +9,8 @@ use App\Provider;
 use App\ViewMinimum;
 use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Create a new controller instance.

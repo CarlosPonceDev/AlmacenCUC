@@ -13,10 +13,10 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('dashboard');
+Route::get('/', 'DashboardController@index')->name('dashboard');
 Route::prefix('laratables')->group(function ()
 {
-  Route::get('minimum', 'HomeController@laratables')->name('laratables.minimum');
+  Route::get('minimum', 'DashboardController@laratables')->name('laratables.minimum');
 });
 Route::prefix('fetch')->group(function ()
 {
