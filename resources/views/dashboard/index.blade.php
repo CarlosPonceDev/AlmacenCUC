@@ -47,8 +47,8 @@
     <table class="table table-hover w-100" id="table-minimum">
       <thead class="thead-dark">
         <tr>
-          <th>Descripción</th>
           <th>Código</th>
+          <th>Descripción</th>
           <th>Cantidad</th>
           <th>Estado</th>
         </tr>
@@ -64,8 +64,8 @@
           serverSide: true,
           ajax: "{{ route('laratables.minimum') }}",
           columns: [
-            { name: 'description' },
             { name: 'code' },
+            { name: 'description' },
             { name: 'total' },
             { name: 'action', orderable: false, searchable: false },
           ]
