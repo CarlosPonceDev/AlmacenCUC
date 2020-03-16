@@ -2,10 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Entry;
+use App\Exits;
+use App\Inventory;
+use App\Observation;
+use App\Product;
+use App\ViewInventory;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,69 +33,22 @@ class InventoryController extends Controller
         return view('inventory.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function destroy(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        if ($product) {
+            Entry::where('product_id', $product->id)->delete();
+            Exits::where('product_id', $product->id)->delete();
+            Inventory::where('product_id', $product->id)->delete();
+            Observation::where('product_id', $product->id)->delete();
+            $product->delete();
+            return redirect()->route('inventario.index')->with('delete', '¡Producto eliminado con éxito!');
+        }
+        return abort('404');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function laratables()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return Laratables::recordsOf(ViewInventory::class);
     }
 }

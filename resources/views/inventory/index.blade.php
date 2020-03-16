@@ -9,8 +9,8 @@
     </button>
   </div>
 
-  <div class="mt-4">
-    <table class="table table-hover table-responsive datatable">
+  <div class="mt-4 table-responsive">
+    <table class="table table-hover" id="table-inventory">
       <thead class="thead-dark">
         <tr>
           <th>Código</th>
@@ -21,27 +21,57 @@
           <th>Gourmet</th>
           <th>Entradas</th>
           <th>Salidas</th>
+          <th>Stock inicial</th>
           <th>Observaciones</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>H1</td>
-          <td>Pala de cortar</td>
-          <td>Herramienta</td>
-          <td>100</td>
-          <td>0</td>
-          <td>0</td>
-          <td>100</td>
-          <td>0</td>
-          <td>Holakas jdhksajhdsajkdh askhjdgsjahg dsaggahjgda shsakj dhajkdkjhsa kdhajkdsk glaskjdsajkldjsa asljdkjsalkjkdas lasj dlkjal</td>
-          <td>
-            <button class="btn btn-warning"><i class="fas fa-pen"></i></button>
-            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-          </td>
-        </tr>
-      </tbody>
     </table>
   </div>
 @endsection
+
+@push('inline-scripts')
+    <script>
+      function dele(param) {
+        notifier.confirm(
+          '¿Seguro que quieres eliminar este producto?',
+          function () {
+            $(param).closest("form").submit();
+          },
+          null,
+          {
+            labels: {
+              confirm: 'Atención',
+              confirmCancel: 'Cancelar',
+            }
+          }
+        )
+      };
+      window.onload = function() {
+        $('#table-inventory').DataTable({
+          serverSide: true,
+          ajax: "{{ route('laratables.inventory') }}",
+          columns: [
+            { name: 'code' },
+            { name: 'description' },
+            { name: 'category' },
+            { name: 'cuc' },
+            { name: 'tomatlan' },
+            { name: 'gourmet' },
+            { name: 'entries' },
+            { name: 'exits' },
+            { name: 'initial_stock' },
+            { name: 'code' },
+            { name: 'action', orderable: false, searchable: false },
+          ]
+        });
+        @if (Session::has('delete'))
+          notifier.success('{{ Session::get("delete") }}', {
+            labels: {
+              success: 'Éxito'
+            }
+          });
+        @endif
+      }
+    </script>
+@endpush

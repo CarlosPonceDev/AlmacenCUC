@@ -17,6 +17,7 @@ Route::get('/', 'DashboardController@index')->name('dashboard');
 Route::prefix('laratables')->group(function ()
 {
   Route::get('minimum', 'DashboardController@laratables')->name('laratables.minimum');
+  Route::get('inventory', 'InventoryController@laratables')->name('laratables.inventory');
 });
 Route::prefix('fetch')->group(function ()
 {
