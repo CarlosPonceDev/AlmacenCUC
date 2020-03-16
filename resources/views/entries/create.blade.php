@@ -92,9 +92,82 @@
         var doneTypingTimer = 1000;
         var typingTimer;
         $('form').submit(function (e) {
-            $('body').prepend('<div class="loader"></div>');
-            e.submit();
+          $('body').prepend('<div class="loader"></div>');
+          $('#category').prop('disabled', false);
+          $('#minimum').prop('disabled', false);
+          e.submit();
         });
+        $('#description').autocomplete({
+          source: function (request, response) {
+            $.ajax({
+              url: '{{ route("fetch.entries.description") }}',
+              type: 'GET',
+              dataType: 'json',
+              data: {
+                "_token": "{{ csrf_token() }}",
+                "search": request.term
+              },
+              success: function (data) {
+                response(data);
+              }
+            });
+          },
+          select: function (event, ui) {
+            let product = ui.item.product;
+            $('#code').val(product.category.prefix + product.code);
+            $('#description').val(ui.item.label);
+            $('#category').val(product.category.name);
+            $('#category').prop('disabled', true);
+            $('#unit').val(product.unit.name);
+            $('#minimum').val(product.inventory.minimum);
+            $('#minimum').prop('disabled', true);
+            $('#description').focus();
+          },
+          search: function (event, ui) {
+            if ($('#code').val('') != '') {
+              $('#code').val('');
+              $('#category').prop('disabled', false);
+              $('#minimum').val('');
+              $('#minimum').prop('disabled', false);
+            }
+          }
+        });
+
+        function doneTypingCode() {
+          $.ajax({
+            method: 'GET',
+            url: '{{ route("fetch.entries.code") }}',
+            data: {
+              "_token": "{{ csrf_token() }}",
+              "code":   $input.val()
+            },
+            beforeSend: function () {
+              $("label[for=code]").append('<div class="spinner-border spinner-border-sm text-success" school="status"><span class="sr-only">Cargando...</span></div>');
+            },
+            complete: function () {
+              $("label[for=code] .spinner-border").remove();
+            }
+          })
+          .done(function (data) {
+            if (typeof data == 'object' && data != null) {
+              let product = data.product;
+              console.log(product);
+              
+              $('#description').val(product.description); 
+              $('#category').val(product.category.name);
+              $('#category').prop('disabled', true);
+              $('#unit').val(product.unit.name);
+              $('#minimum').val(product.inventory.minimum);
+              $('#minimum').prop('disabled', true);
+            } else {
+              $('#description').val(''); 
+              $('#category').prop('disabled', false);
+              $('#minimum').val('');
+              $('#minimum').prop('disabled', false);
+            }
+          });
+        }
+
         function navigate(keyCode, left = null, right = null, up = null, down = null) {
           switch(keyCode) {
               case UP:
@@ -141,45 +214,14 @@
             }
         }
 
-        function doneTypingCode() {
-          $.ajax({
-            method: 'GET',
-            url: '{{ route("entry.fetch.code") }}',
-            data: {
-              "_token": "{{ csrf_token() }}",
-              "code":   $input.val()
-            },
-            beforeSend: function () {
-              $("label[for=code]").append('<div class="spinner-border spinner-border-sm text-success" school="status"><span class="sr-only">Cargando...</span></div>');
-            },
-            complete: function () {
-              $("label[for=code] .spinner-border").remove();
-            }
-          })
-          .done(function (data) {
-            if (typeof data == 'object' && data != null) {
-              let product = data.product;
-              console.log(product);
-              
-              $('#description').val(product.description); 
-              $('#category').val(product.category.name);
-              $('#category').prop('disabled', true);
-              $('#unit').val(product.unit.name);
-              $('#minimum').val(product.inventory.minimum);
-              $('#minimum').prop('disabled', true);
-            } else {
-              $('#description').val(''); 
-              $('#category').prop('disabled', false);
-              $('#minimum').val('');
-              $('#minimum').prop('disabled', false);
-            }
-          });
-        }
-
         $('#date').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, null, 'code', null, 'category');
+            if ($('#category').is(':disabled')) {
+              navigate(e.which, null, 'code', null, 'provider');
+            } else {
+              navigate(e.which, null, 'code', null, 'category');
+            }
           }
         });
 
@@ -187,20 +229,26 @@
           var keyCode = e.keyCode || e.which;
           if (keyCode == LEFT || keyCode == UP || keyCode == RIGHT || keyCode == DOWN || keyCode == ENTER || keyCode == TAB) {
             e.preventDefault();
-            navigate(keyCode, 'date', 'description', null, 'category');
+            if ($('#category').is(':disabled')) {
+              navigate(keyCode, 'date', 'description', null, 'provider');
+            } else {
+              navigate(keyCode, 'date', 'description', null, 'category');
+            }
           } else {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(doneTypingCode, doneTypingTimer);
           }
-        }).focusout(function () {
-          clearTimeout(typingTimer);
-          doneTypingCode();
         });
 
         $('#description').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+          let keyCode = e.keyCode || e.which;
+          if (keyCode == LEFT || keyCode == RIGHT || keyCode == ENTER || keyCode == TAB) {
             e.preventDefault();
-            navigate(e.which, 'code', 'category', null, 'quantity');
+            if ($('#category').is(':disabled')) {
+              navigate(keyCode, 'code', 'quantity', null, null);
+            } else {
+              navigate(keyCode, 'code', 'category', null, null);
+            }
           }
         });
 
@@ -214,14 +262,22 @@
         $('#quantity').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'category', 'unit', 'description', 'bill');
+            if ($('#category').is(':disabled')) {
+              navigate(e.which, 'description', 'unit', 'description', 'bill');
+            } else {
+              navigate(e.which, 'category', 'unit', 'description', 'bill');
+            }
           }
         });
 
         $('#unit').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'quantity', 'minimum', 'description', 'bill');
+            if ($('#minimum').is(':disabled')) {
+              navigate(e.which, 'quantity', 'provider', 'description', 'bill');
+            } else {
+              navigate(e.which, 'quantity', 'minimum', 'description', 'bill');
+            }
           }
         });
 
@@ -235,7 +291,11 @@
         $('#provider').next('.select2-container').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'minimum', 'bill', 'category', 'observations');
+            if ($('#category').is(':disabled')) {
+              navigate(e.which, 'unit', 'bill', 'date', 'observations');
+            } else {
+              navigate(e.which, 'minimum', 'bill', 'category', 'observations');
+            }
           }
         });
 
@@ -249,7 +309,11 @@
         $('#place').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'bill', 'observations', 'minimum', 'observations');
+            if ($('#minimum').is(':disabled')) {
+              navigate(e.which, 'bill', 'observations', 'unit', 'observations');
+            } else {
+              navigate(e.which, 'bill', 'observations', 'minimum', 'observations');
+            }
           }
         });
 
@@ -261,7 +325,7 @@
         });
 
         $('#save').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'observations', null, 'observations', null);
           }

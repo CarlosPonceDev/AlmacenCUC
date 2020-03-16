@@ -20,7 +20,11 @@ Route::prefix('laratables')->group(function ()
 });
 Route::prefix('fetch')->group(function ()
 {
-  Route::get('code/entry', 'EntriesController@fetchCode')->name('entry.fetch.code');
+  Route::prefix('entries')->group(function ()
+  {
+    Route::get('code', 'EntriesController@fetchCode')->name('fetch.entries.code');
+    Route::get('description', 'EntriesController@fetchDescription')->name('fetch.entries.description');
+  });
 });
 Route::resources([
   'entradas'    => 'EntriesController',

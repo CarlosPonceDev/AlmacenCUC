@@ -57,7 +57,7 @@ class EntriesController extends Controller
         $place = Place::where('name', $request->input('place'))->first();
         $provider = Provider::where('id', $request->input('provider'))->first();
         if ($category && $unit && $place && $provider) {
-            if ($request->input('code') == null) {
+            if ($request->input('code') == null || !Product::where('description', $request->input('description'))->first()) {
                 $request->validate([
                     'description'  => 'required|string'
                 ]);
@@ -66,6 +66,7 @@ class EntriesController extends Controller
                 $product = new Product;
                 $product->code = $code + 1;
                 $product->description = $request->input('description');
+                $product->unit_id = $unit->id;
                 $product->category_id = $category->id;
                 $product->save();
 
@@ -80,11 +81,14 @@ class EntriesController extends Controller
                 $inventory->save();
             } else {
                 $request->validate([
-                    'code'  => 'required|string',
                     'description'  => 'required|string'
                 ]);
 
-                $product = Product::where('category_id', $category->id)->where('code', substr($request->input('code'), 1))->first();
+                if ($request->input('code') == null) {
+                    $product = Product::where('category_id', $category->id)->where('code', substr($request->input('code'), 1))->first();
+                } else {
+                    $product = Product::where('description', $request->input('description'))->first();
+                }
                 if (!$product) {
                     return abort('404');
                 }
@@ -174,5 +178,19 @@ class EntriesController extends Controller
             }
         }
         return null;
+    }
+
+    public function fetchDescription(Request $request)
+    {
+        $products = Product::with('category')->with('unit')->with('inventory')->where('description', 'like', '%' . $request->input('search') . '%')->limit(10)->get();
+        $response = [];
+        foreach ($products as $product) {
+            $response[] = [
+                'label' => $product->description, 
+                'value' => $product->description,
+                'product' => $product,
+            ];
+        }
+        return response()->json($response);
     }
 }
