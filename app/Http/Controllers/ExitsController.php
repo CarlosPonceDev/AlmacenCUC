@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Place;
 use App\Employee;
+use App\Exits;
+use App\Observation;
+use App\Product;
 use App\Unit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ExitsController extends Controller
@@ -40,7 +45,48 @@ class ExitsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code'          => 'required|string',
+            'description'   => 'required|string',
+            'quantity'      => 'required|numeric'
+        ]);
+        $employee = Employee::where('id', $request->input('employee'))->first();
+        $unit = Unit::where('name', $request->input('unit'))->first();
+        $place = Place::where('name', $request->input('place'))->first();
+        $category = Category::where('prefix', substr($request->input('code'), 0, 1))->first();
+        if ($employee && $unit && $place && $category) {
+            if ($request->input('code') == null) {
+                $product = Product::where('description', $request->input('description'))->first();
+            } else {
+                $product = Product::where('category_id', $category->id)->where('code', substr($request->input('code'), 1))->first();
+            }
+            if (!$product) {
+                return abort('404');
+            }
+
+            $exit = new Exits();
+            $exit->date = Carbon::parse($request->input('date'))->format('Y-m-d H:i:s');
+            $exit->quantity = $request->input('quantity');
+            $exit->unit_id = $unit->id;
+            $exit->place_id = $place->id;
+
+            if (!isEmptyString($request->input('observations'))) {
+                $observation = new Observation();
+                $observation->description = $request->input('observations');
+                $observation->product_id = $product->id;
+                $observation->save();
+
+                $exit->observation_id = $observation->id;
+            }
+
+            $exit->employee_id = $employee->id;
+            $exit->product_id = $product->id;
+            $exit->user_id = auth()->user()->id;
+            $exit->save();
+        } else {
+            return abort('404');
+        }
+        return redirect()->route('salidas.create')->with('success', '¡Salida guardada con éxito!');
     }
 
     /**

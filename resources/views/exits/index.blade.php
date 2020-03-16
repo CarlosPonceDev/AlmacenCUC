@@ -70,10 +70,67 @@
 @push('inline-scripts')
     <script>
       window.onload = function(){
+        var $input = $('#code');
+        var doneTypingTimer = 1000;
+        var typingTimer;
         $('form').submit(function (e) {
             $('body').prepend('<div class="loader"></div>');
             e.submit();
         });
+        $('#description').autocomplete({
+          source: function (request, response) {
+            $.ajax({
+              url: '{{ route("fetch.description") }}',
+              type: 'GET',
+              dataType: 'json',
+              data: {
+                "_token": "{{ csrf_token() }}",
+                "search": request.term
+              },
+              success: function (data) {
+                response(data);
+              }
+            });
+          },
+          select: function (event, ui) {
+            let product = ui.item.product;
+            $('#code').val(product.category.prefix + product.code);
+            $('#description').val(ui.item.label);
+            $('#unit').val(product.unit.name);
+          },
+          search: function (event, ui) {
+            if ($('#code').val('') != '') {
+              $('#code').val('');
+            }
+          }
+        });
+
+        function doneTypingCode() {
+          $.ajax({
+            method: 'GET',
+            url: '{{ route("fetch.code") }}',
+            data: {
+              "_token": "{{ csrf_token() }}",
+              "code":   $input.val()
+            },
+            beforeSend: function () {
+              $("label[for=code]").append('<div class="spinner-border spinner-border-sm text-success" school="status"><span class="sr-only">Cargando...</span></div>');
+            },
+            complete: function () {
+              $("label[for=code] .spinner-border").remove();
+            }
+          })
+          .done(function (data) {
+            if (typeof data == 'object' && data != null) {
+              let product = data.product;
+              $('#description').val(product.description); 
+              $('#unit').val(product.unit.name);
+            } else {
+              $('#description').val(''); 
+            }
+          });
+        }
+
         function navigate(keyCode, left = null, right = null, up = null, down = null) {
           switch(keyCode) {
               case UP:
@@ -131,11 +188,14 @@
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'date', 'description', null, 'category');
+          } else {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(doneTypingCode, doneTypingTimer);
           }
         });
 
         $('#description').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'code', 'employee', null, 'quantity');
           }

@@ -85,9 +85,9 @@ class EntriesController extends Controller
                 ]);
 
                 if ($request->input('code') == null) {
-                    $product = Product::where('category_id', $category->id)->where('code', substr($request->input('code'), 1))->first();
-                } else {
                     $product = Product::where('description', $request->input('description'))->first();
+                } else {
+                    $product = Product::where('category_id', $category->id)->where('code', substr($request->input('code'), 1))->first();
                 }
                 if (!$product) {
                     return abort('404');
@@ -95,15 +95,15 @@ class EntriesController extends Controller
             }
 
             $entry = new Entry();
-            $entry->date = Carbon::now()->format('Y-m-d H:i:s');
+            $entry->date = Carbon::parse($request->input('date'))->format('Y-m-d H:i:s');
             $entry->quantity = $request->input('quantity');
             $entry->bill = $request->input('bill');
             $entry->unit_id = $unit->id;
             $entry->place_id = $place->id;
 
-            if (!isEmptyString($request->observations)) {
+            if (!isEmptyString($request->input('observations'))) {
                 $observation = new Observation();
-                $observation->description = $request->observations;
+                $observation->description = $request->input('observations');
                 $observation->product_id = $product->id;
                 $observation->save();
 
