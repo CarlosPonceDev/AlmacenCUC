@@ -68,13 +68,14 @@ class MigrateProducts extends Command
                     $unit_id = $unit->id;
                 }
             }
-            if (array_key_exists($producto->descripcion_producto, $insertar)) {
+            $description = md5(preg_replace('/\s+/', '', $producto->descripcion_producto));
+            if (array_key_exists($description, $insertar)) {
                 $lost[] = [
                     'info'  => json_encode($producto),
                     'table' => 'tbl_inventario'
                 ];
             } else {
-                $insertar[$producto->descripcion_producto] = [
+                $insertar[$description] = [
                     'code'          => substr($producto->codigo_producto, 1),
                     'description'   => htmlspecialchars($producto->descripcion_producto),
                     'unit_id'       => $unit_id,
