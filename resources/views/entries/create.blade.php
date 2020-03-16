@@ -100,7 +100,7 @@
         $('#description').autocomplete({
           source: function (request, response) {
             $.ajax({
-              url: '{{ route("fetch.entries.description") }}',
+              url: '{{ route("fetch.description") }}',
               type: 'GET',
               dataType: 'json',
               data: {
@@ -121,7 +121,6 @@
             $('#unit').val(product.unit.name);
             $('#minimum').val(product.inventory.minimum);
             $('#minimum').prop('disabled', true);
-            $('#description').focus();
           },
           search: function (event, ui) {
             if ($('#code').val('') != '') {
@@ -136,7 +135,7 @@
         function doneTypingCode() {
           $.ajax({
             method: 'GET',
-            url: '{{ route("fetch.entries.code") }}',
+            url: '{{ route("fetch.code") }}',
             data: {
               "_token": "{{ csrf_token() }}",
               "code":   $input.val()
@@ -151,8 +150,6 @@
           .done(function (data) {
             if (typeof data == 'object' && data != null) {
               let product = data.product;
-              console.log(product);
-              
               $('#description').val(product.description); 
               $('#category').val(product.category.name);
               $('#category').prop('disabled', true);
