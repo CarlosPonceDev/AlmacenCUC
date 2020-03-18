@@ -42,18 +42,21 @@ class CreateMinimumView extends Migration
                     FROM entries en
                     WHERE en.product_id = p.id
                         AND en.place_id = (
-                        SELECT pl.id
-                        FROM places pl
-                        WHERE name LIKE '%cuc%'
-                    )
+                            SELECT pl.id
+                            FROM places pl
+                            WHERE name LIKE '%cuc%'
+                        )
+                        AND en.deleted_at IS NULL
                 ) -
                 (
                     SELECT IF(IFNULL(SUM(ex.quantity), 0) = 0, 0, SUM(ex.quantity))
                     FROM exits ex
                     WHERE ex.product_id = p.id
+                        AND ex.deleted_at IS NULL
                 )
             ) AS total
         FROM products p
+        WHERE p.deleted_at IS NULL
         HAVING total < minimum)");
     }
 
