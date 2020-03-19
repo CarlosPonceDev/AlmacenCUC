@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Employee;
 use App\Product;
+use App\Provider;
 use Illuminate\Http\Request;
 
 class FetchsController extends Controller
@@ -47,6 +48,20 @@ class FetchsController extends Controller
                 'label' => $employee->name,
                 'value' => $employee->name,
                 'employee' => $employee,
+            ];
+        }
+        return response()->json($response);
+    }
+
+    public function providers(Request $request)
+    {
+        $providers = Provider::where('name', 'like', '%' . $request->input('search') . '%')->limit(5)->get();
+        $response = [];
+        foreach ($providers as $provider) {
+            $response[] = [
+                'label' => $provider->name,
+                'value' => $provider->name,
+                'provider' => $provider,
             ];
         }
         return response()->json($response);

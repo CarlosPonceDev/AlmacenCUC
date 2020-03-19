@@ -17,4 +17,15 @@ class Provider extends Model
     {
         return $this->hasMany(Entry::class);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | LARATABLES
+    |--------------------------------------------------------------------------
+    */
+
+    public static function laratablesCustomAction($provider)
+    {
+        return view('providers.components.buttons', compact('provider'))->render();
+    }
 }

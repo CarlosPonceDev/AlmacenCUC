@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Provider;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
 
 class ProvidersController extends Controller
@@ -23,7 +25,7 @@ class ProvidersController extends Controller
      */
     public function create()
     {
-        //
+        return view('providers.create');
     }
 
     /**
@@ -34,7 +36,10 @@ class ProvidersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $provider = new Provider();
+        $provider->name = $request->input('name');
+        $provider->save();
+        return redirect()->route('proveedores.index')->with('status', '¡Proveedor agregado con éxito!');
     }
 
     /**
@@ -56,7 +61,11 @@ class ProvidersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $provider = Provider::find($id);
+        if (!$provider) {
+            return abort('404');
+        }
+        return view('providers.edit', compact('provider'));
     }
 
     /**
@@ -68,7 +77,14 @@ class ProvidersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $provider = Provider::find($id);
+        if (!$provider) {
+            return abort('404');
+        }
+
+        $provider->name = $request->input('name');
+        $provider->save();
+        return redirect()->route('proveedores.index')->with('status', '¡Proveedor editado con éxito!');
     }
 
     /**
@@ -79,6 +95,17 @@ class ProvidersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $provider = Provider::find($id);
+        if (!$provider) {
+            return abort('404');
+        }
+
+        $provider->delete();
+        return redirect()->route('proveedores.index')->with('status', '¡Proveedor eliminado con éxito!');
+    }
+
+    public function laratables()
+    {
+        return Laratables::recordsOf(Provider::class);
     }
 }
