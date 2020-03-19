@@ -1,8 +1,8 @@
 @extends('layouts.app-sbadmin')
 
 @section('content')
-  <div class="row">
-    <div class="col-3">
+  <div class="row mb-4">
+    <div class="col-3 pr-0">
       @component('dashboard.components.info-card', [
         'link'  => 'inventario.index',
         'color' => 'primary',
@@ -12,7 +12,7 @@
       ])@endcomponent
     </div>
 
-    <div class="col-3">
+    <div class="col-3 pr-0">
       @component('dashboard.components.info-card', [
         'link'  => 'empleados.index',
         'color' => 'info',
@@ -22,7 +22,7 @@
       ])@endcomponent
     </div>
 
-    <div class="col-3">
+    <div class="col-3 pr-0">
       @component('dashboard.components.info-card', [
         'link'  => 'proveedores.index',
         'color' => 'success',
@@ -43,17 +43,22 @@
     </div>
   </div>
 
-  <div class="row my-5 table-responsive">
-    <table class="table table-hover w-100" id="table-minimum">
-      <thead class="thead-dark">
-        <tr>
-          <th>Código</th>
-          <th>Descripción</th>
-          <th>Cantidad</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-    </table>
+  <div class="card">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Mínima</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped" id="table-minimum">
+          <thead class="thead-dark">
+            <tr>
+              <th>Código</th>
+              <th>Descripción</th>
+              <th>Cantidad</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
   </div>
 @endsection
 

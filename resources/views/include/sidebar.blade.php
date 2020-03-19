@@ -3,7 +3,7 @@
     <div class="nav">
       <div class="sb-sidenav-menu-heading">Panel de administrador</div>
       <a class="nav-link" href="{{ route('dashboard') }}">
-        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+        <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
         Inicio
       </a>
       <a class="nav-link" href="{{ route('entradas.create') }}">
