@@ -34,11 +34,16 @@ class InventoryController extends Controller
      */
     public function index()
     {
+        return view('inventory.index');
+    }
+
+    public function create()
+    {
         $categories = Category::all();
         $places = Place::all();
         $providers = Provider::all();
         $units = Unit::all();
-        return view('inventory.index', compact(['categories', 'places', 'providers', 'units']));
+        return view('inventory.create', compact(['categories', 'places', 'providers', 'units']));
     }
 
     public function store(Request $request)
@@ -84,7 +89,7 @@ class InventoryController extends Controller
         } else {
             return abort('404');
         }
-        return redirect()->route('inventario.index')->with('success', '¡Producto guardado con éxito!');
+        return redirect()->route('inventario.index')->with('create', '¡Producto guardado con éxito!');
     }
 
     public function destroy(Request $request, $id)
@@ -96,7 +101,7 @@ class InventoryController extends Controller
             Inventory::where('product_id', $product->id)->delete();
             Observation::where('product_id', $product->id)->delete();
             $product->delete();
-            return redirect()->route('inventario.index')->with('delete', '¡Producto eliminado con éxito!');
+            return redirect()->route('inventario.index')->with('destroy', '¡Producto eliminado con éxito!');
         }
         return abort('404');
     }
