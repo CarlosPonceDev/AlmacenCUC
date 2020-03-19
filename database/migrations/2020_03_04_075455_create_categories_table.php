@@ -19,6 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name')->comment('Nombre');
             $table->string('description')->comment('Descripcion');
             $table->string('prefix')->comment('Prefijo');
+            $table->string('icon')->comment('Icono');
             $table->timestamps();
             $table->softDeletes();
         });
