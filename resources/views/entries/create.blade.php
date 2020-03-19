@@ -165,28 +165,8 @@
           });
         }
 
-        function navigate(keyCode, left = null, right = null, up = null, down = null) {
+        function navigate(keyCode, left = null, right = null) {
           switch(keyCode) {
-              case UP:
-                if (up != null) {
-                  if (up == 'provider') {
-                    $('#' + up).select2('focus');
-                  } else {
-                    $('#' + up).focus();
-                  }
-                }
-              break;
-
-              case DOWN:
-                if (down != null) {
-                  if (down == 'provider') {
-                    $('#' + down).select2('focus');
-                  } else {
-                    $('#' + down).focus();
-                  }
-                }
-              break;
-
               case LEFT:
                 if (left != null) {
                   if (left == 'provider') {
@@ -214,11 +194,7 @@
         $('#date').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            if ($('#category').is(':disabled')) {
-              navigate(e.which, null, 'code', null, 'provider');
-            } else {
-              navigate(e.which, null, 'code', null, 'category');
-            }
+            navigate(e.which, null, 'code');
           }
         });
 
@@ -226,11 +202,7 @@
           var keyCode = e.keyCode || e.which;
           if (keyCode == LEFT || keyCode == UP || keyCode == RIGHT || keyCode == DOWN || keyCode == ENTER || keyCode == TAB) {
             e.preventDefault();
-            if ($('#category').is(':disabled')) {
-              navigate(keyCode, 'date', 'description', null, 'provider');
-            } else {
-              navigate(keyCode, 'date', 'description', null, 'category');
-            }
+            navigate(keyCode, 'date', 'description');
           } else {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(doneTypingCode, doneTypingTimer);
@@ -242,17 +214,17 @@
           if (keyCode == LEFT || keyCode == RIGHT || keyCode == ENTER || keyCode == TAB) {
             e.preventDefault();
             if ($('#category').is(':disabled')) {
-              navigate(keyCode, 'code', 'quantity', null, null);
+              navigate(keyCode, 'code', 'quantity');
             } else {
-              navigate(keyCode, 'code', 'category', null, null);
+              navigate(keyCode, 'code', 'category');
             }
           }
         });
 
         $('#category').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'description', 'quantity', 'date', 'provider');
+            navigate(e.which, 'description', 'quantity');
           }
         });
 
@@ -260,20 +232,20 @@
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
             if ($('#category').is(':disabled')) {
-              navigate(e.which, 'description', 'unit', 'description', 'bill');
+              navigate(e.which, 'description', 'unit');
             } else {
-              navigate(e.which, 'category', 'unit', 'description', 'bill');
+              navigate(e.which, 'category', 'unit');
             }
           }
         });
 
         $('#unit').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
             if ($('#minimum').is(':disabled')) {
-              navigate(e.which, 'quantity', 'provider', 'description', 'bill');
+              navigate(e.which, 'quantity', 'provider');
             } else {
-              navigate(e.which, 'quantity', 'minimum', 'description', 'bill');
+              navigate(e.which, 'quantity', 'minimum');
             }
           }
         });
@@ -281,7 +253,7 @@
         $('#minimum').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'unit', 'provider', 'description', 'place');
+            navigate(e.which, 'unit', 'provider');
           }
         });
 
@@ -289,9 +261,9 @@
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
             if ($('#category').is(':disabled')) {
-              navigate(e.which, 'unit', 'bill', 'date', 'observations');
+              navigate(e.which, 'unit', 'bill');
             } else {
-              navigate(e.which, 'minimum', 'bill', 'category', 'observations');
+              navigate(e.which, 'minimum', 'bill');
             }
           }
         });
@@ -299,32 +271,28 @@
         $('#bill').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'provider', 'place', 'quantity', 'observations');
+            navigate(e.which, 'provider', 'place');
           }
         });
 
         $('#place').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            if ($('#minimum').is(':disabled')) {
-              navigate(e.which, 'bill', 'observations', 'unit', 'observations');
-            } else {
-              navigate(e.which, 'bill', 'observations', 'minimum', 'observations');
-            }
+            navigate(e.which, 'bill', 'observations');
           }
         });
 
         $('#observations').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'place', 'save', 'provider', 'save');
+            navigate(e.which, 'place', 'save');
           }
         });
 
         $('#save').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'observations', null, 'observations', null);
+            navigate(e.which, 'observations', null);
           }
         });
 

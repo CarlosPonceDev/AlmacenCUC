@@ -62,7 +62,11 @@ class EntriesController extends Controller
                     'description'  => 'required|string'
                 ]);
 
-                $code = Product::where('category_id', $category->id)->orderBy('code', 'desc')->first()->code;
+                $code = 0;
+                $old_product = Product::where('category_id', $category->id)->orderBy('code', 'desc')->first();
+                if ($old_product) {
+                    $code = $old_product->code;
+                }
                 $product = new Product;
                 $product->code = $code + 1;
                 $product->description = $request->input('description');

@@ -3,6 +3,6 @@
   <form action="{{ route('inventario.destroy', $product) }}" method="POST" class="d-inline">
     @method('DELETE')
     @csrf
-    <button type="button" class="btn btn-danger btn-delete" onclick="dele(this)"><i class="fas fa-trash-alt"></i></button>
+    <button type="button" class="btn btn-danger btn-destroy" onclick="destroy(this)"><i class="fas fa-trash-alt"></i></button>
   </form>
 </div>
