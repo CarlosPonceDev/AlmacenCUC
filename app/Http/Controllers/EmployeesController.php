@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Employee;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmployeesController extends Controller
 {
@@ -80,5 +83,13 @@ class EmployeesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function laratables()
+    {
+        return Laratables::recordsOf(Employee::class, function ($query)
+        {
+            return $query->join('departments', 'employees.department_id', '=', 'departments.id')->select(['employees.*', 'departments.description']);
+        });
     }
 }
