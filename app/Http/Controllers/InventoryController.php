@@ -37,6 +37,11 @@ class InventoryController extends Controller
         return view('inventory.index');
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $categories = Category::all();
@@ -46,6 +51,12 @@ class InventoryController extends Controller
         return view('inventory.create', compact(['categories', 'places', 'providers', 'units']));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -89,10 +100,91 @@ class InventoryController extends Controller
         } else {
             return abort('404');
         }
-        return redirect()->route('inventario.index')->with('create', '¡Producto guardado con éxito!');
+        return redirect()->route('inventario.index')->with('status', '¡Producto guardado con éxito!');
     }
 
-    public function destroy(Request $request, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $product = Product::where('id', $id)->first();
+        if (!$product) {
+            return abort('404');
+        }
+        $categories = Category::all();
+        $places = Place::all();
+        $providers = Provider::all();
+        $units = Unit::all();
+        return view('inventory.edit', compact(['product', 'categories', 'places', 'providers', 'units']));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'description'   => 'required|string',
+            'unit'          => 'required|string',
+            'category'      => 'required|string',
+            'quantity'      => 'required|numeric',
+            'minimum'       => 'required|numeric',
+        ]);
+        $unit = Unit::where('name', $request->input('unit'))->first();
+        $category = Category::where('name', $request->input('category'))->first();
+        $product = Product::find($id);
+        if ($unit && $category && $product) {
+            if ($product->category->name != $category->name) {
+                $code = 0;
+                $old_product = Product::where('category_id', $category->id)->orderBy('code', 'desc')->first();
+                if ($old_product) {
+                    $code = $old_product->code;
+                }
+
+                $product->code = $code + 1;
+                $product->category_id = $category->id;
+            }
+
+            $product->description = $request->input('description');
+            $product->unit_id = $unit->id;
+            $product->save();
+
+            $inventory = $product->inventory;
+            $inventory->initial_stock = $request->input('quantity');
+            $inventory->minimum = $request->input('minimum');
+            $inventory->save();
+        } else {
+            return abort('404');
+        }
+        return redirect()->route('inventario.index')->with('status', '¡Producto editado con éxito!');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
         $product = Product::find($id);
         if ($product) {
@@ -101,7 +193,7 @@ class InventoryController extends Controller
             Inventory::where('product_id', $product->id)->delete();
             Observation::where('product_id', $product->id)->delete();
             $product->delete();
-            return redirect()->route('inventario.index')->with('destroy', '¡Producto eliminado con éxito!');
+            return redirect()->route('inventario.index')->with('status', '¡Producto eliminado con éxito!');
         }
         return abort('404');
     }

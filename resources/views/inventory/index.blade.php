@@ -76,16 +76,8 @@
           ]
         });
 
-        @if (Session::has('destroy'))
-          notifier.success('{{ Session::get("destroy") }}', {
-            labels: {
-              success: 'Éxito'
-            }
-          });
-        @endif
-
-        @if (Session::has('create'))
-          notifier.success('{{ Session::get("create") }}', {
+        @if (Session::has('status'))
+          notifier.info('{{ Session::get("status") }}', {
             labels: {
               success: 'Éxito'
             }
