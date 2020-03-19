@@ -17,6 +17,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'A';
+        $category->icon = 'fan';
         $category->save();
         
         $category_name = 'Electricidad';
@@ -24,6 +25,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'E';
+        $category->icon = 'bolt';
         $category->save();
         
         $category_name = 'Fontanería';
@@ -31,6 +33,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'F';
+        $category->icon = 'toilet-paper';
         $category->save();
         
         $category_name = 'General';
@@ -38,6 +41,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'G';
+        $category->icon = 'cog';
         $category->save();
         
         $category_name = 'Herramienta';
@@ -45,6 +49,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'H';
+        $category->icon = 'tools';
         $category->save();
         
         $category_name = 'Jardinería';
@@ -52,6 +57,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'J';
+        $category->icon = 'oil-can';
         $category->save();
         
         $category_name = 'Limpieza';
@@ -59,6 +65,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'L';
+        $category->icon = 'broom';
         $category->save();
         
         $category_name = 'Pintura';
@@ -66,6 +73,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'P';
+        $category->icon = 'brush';
         $category->save();
         
         $category_name = 'Equipo de servicio';
@@ -73,6 +81,7 @@ class CategoryTableSeeder extends Seeder
         $category->name = replaceSpecialCharacters($category_name);
         $category->description = $category_name;
         $category->prefix = 'S';
+        $category->icon = 'people-carry';
         $category->save();
     }
 }
