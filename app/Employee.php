@@ -29,9 +29,9 @@ class Employee extends Model
     |--------------------------------------------------------------------------
     */
 
-    public static function laratablesCustomAction($product)
+    public static function laratablesCustomAction($employee)
     {
-        return view('inventory.components.buttons', compact('product'))->render();
+        return view('employees.components.buttons', compact('employee'))->render();
     }
 
     public static function laratablesCustomDepartment($employee)

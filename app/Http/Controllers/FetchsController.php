@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Employee;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,20 @@ class FetchsController extends Controller
                 'label' => $product->description, 
                 'value' => $product->description,
                 'product' => $product,
+            ];
+        }
+        return response()->json($response);
+    }
+
+    public function employees(Request $request)
+    {
+        $employees = Employee::where('name', 'like', '%' . $request->input('search') . '%')->limit(5)->get();
+        $response = [];
+        foreach ($employees as $employee) {
+            $response[] = [
+                'label' => $employee->name,
+                'value' => $employee->name,
+                'employee' => $employee,
             ];
         }
         return response()->json($response);

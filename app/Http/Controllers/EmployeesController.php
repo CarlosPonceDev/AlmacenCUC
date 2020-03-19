@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Department;
 use App\Employee;
 use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
@@ -26,7 +27,8 @@ class EmployeesController extends Controller
      */
     public function create()
     {
-        //
+        $departments = Department::all();
+        return view('employees.create', compact('departments'));
     }
 
     /**
@@ -37,7 +39,17 @@ class EmployeesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $department = Department::where('name', $request->input('department'))->first();
+        if (!$department) {
+            return abort('404');
+        }
+
+        $employee = new Employee();
+        $employee->name = $request->input('name');
+        $employee->department_id = $department->id;
+        $employee->save();
+
+        return redirect()->route('empleados.index')->with('status', '¡Empleado guardado con éxito!');
     }
 
     /**
@@ -59,7 +71,12 @@ class EmployeesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee = Employee::find($id);
+        if (!$employee) {
+            return abort('404');
+        }
+        $departments = Department::all();
+        return view('employees.edit', compact('employee', 'departments'));
     }
 
     /**
@@ -71,7 +88,17 @@ class EmployeesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $employee = Employee::find($id);
+        $department = Department::where('name', $request->input('department'))->first();
+        if (!$department || !$employee) {
+            return abort('404');
+        }
+
+        $employee->name = $request->input('name');
+        $employee->department_id = $department->id;
+        $employee->save();
+
+        return redirect()->route('empleados.index')->with('status', '¡Empleado editado con éxito!');
     }
 
     /**
@@ -82,7 +109,13 @@ class EmployeesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee = Employee::find($id);
+        if (!$employee) {
+            return abort('404');
+        }
+
+        $employee->delete();
+        return redirect()->route('empleados.index')->with('status', '¡Empleado eliminado con éxito!');
     }
 
     public function laratables()
