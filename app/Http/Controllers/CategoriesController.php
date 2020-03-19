@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\ViewInventory;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -82,5 +84,14 @@ class CategoriesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function laratables($category)
+    {
+        $cat = Category::find($category);
+        return Laratables::recordsOf(ViewInventory::class, function ($query) use($cat)
+        {
+            return $query->where('category', 'LIKE', '%' . $cat->description . '%');
+        });
     }
 }

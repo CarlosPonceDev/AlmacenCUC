@@ -202,4 +202,14 @@ class InventoryController extends Controller
     {
         return Laratables::recordsOf(ViewInventory::class);
     }
+
+    public function category($category)
+    {
+        $category = Category::where('name', $category)->first();
+        if (!$category) {
+            return abort('404');
+        }
+
+        return view('inventory.index', compact('category'));
+    }
 }

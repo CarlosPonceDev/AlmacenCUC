@@ -2,7 +2,7 @@
 
 @section('content')
   <div class="d-flex justify-content-between mb-3">
-    <h1>Inventario</h1>
+    <h1>Inventario{{ isset($category) ? ' - ' . $category->description : '' }}</h1>
     <a href="{{ route('inventario.create') }}">
       <button class="btn btn-lg btn-success btn-create">
         <i class="fas fa-plus mr-2"></i>Crear producto
@@ -11,7 +11,12 @@
   </div>
 
   <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active">Inventario</li>
+    @if (isset($category))
+      <li class="breadcrumb-item"><a href="{{ route('inventario.index') }}">Inventario</a></li>
+      <li class="breadcrumb-item active">{{ $category->description }}</li>
+    @else
+      <li class="breadcrumb-item active">Inventario</li>
+    @endif
   </ol>
 
   <div class="card">
@@ -60,7 +65,7 @@
       window.onload = function() {
         $('#table-inventory').DataTable({
           serverSide: true,
-          ajax: "{{ route('laratables.inventory') }}",
+          ajax: "{{ isset($category) ? route('laratables.categories', $category) :  route('laratables.inventory') }}",
           columns: [
             { name: 'code' },
             { name: 'description' },

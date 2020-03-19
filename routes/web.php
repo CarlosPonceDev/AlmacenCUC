@@ -18,6 +18,7 @@ Route::prefix('laratables')->group(function ()
 {
   Route::get('minimum', 'DashboardController@laratables')->name('laratables.minimum');
   Route::get('inventory', 'InventoryController@laratables')->name('laratables.inventory');
+  Route::get('category/{category}', 'CategoriesController@laratables')->name('laratables.categories');
   Route::get('employees', 'EmployeesController@laratables')->name('laratables.employees');
   Route::get('providers', 'ProvidersController@laratables')->name('laratables.providers');
 });
@@ -28,6 +29,7 @@ Route::prefix('fetch')->group(function ()
   Route::get('employees', 'FetchsController@employees')->name('fetch.employees');
   Route::get('providers', 'FetchsController@providers')->name('fetch.providers');
 });
+Route::get('inventario/categoria/{category}', 'InventoryController@category')->name('inventario.category');
 Route::resources([
   'entradas'    => 'EntriesController',
   'salidas'     => 'ExitsController',

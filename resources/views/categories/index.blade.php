@@ -8,8 +8,7 @@
       <div class="row mt-4">
         <div class="col">
           @component('categories.components.category-button', [
-            'icon'  => $category->icon,
-            'name'  => $category->description
+            'category'  => $category
           ])
           @endcomponent
         </div>
