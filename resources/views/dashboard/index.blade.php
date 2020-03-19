@@ -68,7 +68,8 @@
             { name: 'description' },
             { name: 'total' },
             { name: 'action', orderable: false, searchable: false },
-          ]
+          ],
+          language: language
         });
       }
     </script>

@@ -78,7 +78,8 @@
             { name: 'initial_stock' },
             { name: 'code' },
             { name: 'action', orderable: false, searchable: false },
-          ]
+          ],
+          language: language
         });
 
         @if (Session::has('status'))
