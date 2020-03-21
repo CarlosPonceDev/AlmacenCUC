@@ -22,7 +22,10 @@
         </div>
         <div class="row mt-4">
           <div class="col">
-            <button type="submit" id="save" class="btn btn-lg btn-block btn-primary">Guadar proveedor</button>
+            <a href="{{ route('proveedores.index') }}"><button type="button" id="back" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-arrow-left mr-3"></i>Regresar</button></a>
+          </div>
+          <div class="col">
+            <button type="submit" id="save" class="btn btn-lg btn-block btn-primary"><i class="fas fa-check mr-3"></i>Editar proveedor</button>
           </div>
         </div>
       </form>
@@ -69,13 +72,19 @@
         $('#name').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, null, 'save');
+            navigate(e.which, null, 'back');
+          }
+        });
+        $('#back').keydown(function (e) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'name', 'save');
           }
         });
         $('#save').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'name', null);
+            navigate(e.which, 'back', null);
           }
         });
       }

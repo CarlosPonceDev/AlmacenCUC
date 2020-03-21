@@ -121,7 +121,7 @@ class EntriesController extends Controller
         } else {
             return abort('404');
         }
-        return redirect()->route('entradas.create')->with('success', '¡Entrada guardada con éxito!');
+        return redirect()->route('entradas.create')->with('success', '¡Entrada creada con éxito!');
     }
 
     /**

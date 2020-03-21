@@ -34,7 +34,7 @@ class ExitsController extends Controller
         $employees = Employee::all();
         $units = Unit::all();
         $places = Place::all();
-        return view('exits.index', compact(['employees', 'units', 'places']));
+        return view('exits.create', compact(['employees', 'units', 'places']));
     }
 
     /**
@@ -86,7 +86,7 @@ class ExitsController extends Controller
         } else {
             return abort('404');
         }
-        return redirect()->route('salidas.create')->with('success', '¡Salida guardada con éxito!');
+        return redirect()->route('salidas.create')->with('success', '¡Salida creada con éxito!');
     }
 
     /**

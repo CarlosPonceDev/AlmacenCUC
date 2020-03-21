@@ -49,7 +49,7 @@ class EmployeesController extends Controller
         $employee->department_id = $department->id;
         $employee->save();
 
-        return redirect()->route('empleados.index')->with('status', '¡Empleado guardado con éxito!');
+        return redirect()->route('empleados.index')->with('status', '¡Empleado creado con éxito!');
     }
 
     /**

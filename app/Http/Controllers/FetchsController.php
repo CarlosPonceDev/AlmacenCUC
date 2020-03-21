@@ -25,7 +25,7 @@ class FetchsController extends Controller
         return null;
     }
 
-    public function description(Request $request)
+    public function product(Request $request)
     {
         $products = Product::with('category')->with('unit')->with('inventory')->where('description', 'like', '%' . $request->input('search') . '%')->limit(10)->get();
         $response = [];

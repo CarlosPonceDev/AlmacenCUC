@@ -100,7 +100,7 @@ class InventoryController extends Controller
         } else {
             return abort('404');
         }
-        return redirect()->route('inventario.index')->with('status', '¡Producto guardado con éxito!');
+        return redirect()->route('inventario.index')->with('status', '¡Producto creado con éxito!');
     }
 
     /**
@@ -187,15 +187,27 @@ class InventoryController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        if ($product) {
-            Entry::where('product_id', $product->id)->delete();
-            Exits::where('product_id', $product->id)->delete();
-            Inventory::where('product_id', $product->id)->delete();
-            Observation::where('product_id', $product->id)->delete();
-            $product->delete();
-            return redirect()->route('inventario.index')->with('status', '¡Producto eliminado con éxito!');
+        if (!$product) {
+            return abort('404');
         }
-        return abort('404');
+        $entries = Entry::where('product_id', $product->id)->get();
+        $exits = Exits::where('product_id', $product->id)->get();
+        $inventory = Inventory::where('product_id', $product->id)->get();
+        $observations = Observation::where('product_id', $product->id)->get();
+        $product->delete();
+        foreach ($entries as $entry) {
+            $entry->delete();
+        }
+        foreach ($exits as $exit) {
+            $exit->delete();
+        }
+        foreach ($inventory as $invent) {
+            $invent->delete();
+        }
+        foreach ($observations as $observation) {
+            $observation->delete();
+        }
+        return redirect()->route('inventario.index')->with('status', '¡Producto eliminado con éxito!');
     }
 
     public function laratables()

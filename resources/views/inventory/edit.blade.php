@@ -46,7 +46,10 @@
         </div>
         <div class="row mt-4">
           <div class="col">
-            <button type="submit" id="save" class="btn btn-lg btn-block btn-primary">Editar producto</button>
+            <a href="{{ route('inventario.index') }}"><button type="button" id="back" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-arrow-left mr-3"></i>Regresar</button></a>
+          </div>
+          <div class="col">
+            <button type="submit" id="save" class="btn btn-lg btn-block btn-primary"><i class="fas fa-check mr-3"></i>Editar producto</button>
           </div>
         </div>
       </form>
@@ -60,7 +63,7 @@
         $('#description').autocomplete({
           source: function (request, response) {
             $.ajax({
-              url: '{{ route("fetch.description") }}',
+              url: '{{ route("fetch.product") }}',
               type: 'GET',
               dataType: 'json',
               data: {
@@ -119,13 +122,19 @@
         $('#minimum').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'category', 'save');
+            navigate(e.which, 'category', 'back');
+          }
+        });
+        $('#back').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'minimum', 'save');
           }
         });
         $('#save').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'minimum', null);
+            navigate(e.which, 'back', null);
           }
         });
       }

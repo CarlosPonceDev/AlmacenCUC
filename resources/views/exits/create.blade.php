@@ -59,7 +59,10 @@
         </div>
         <div class="row mt-4">
           <div class="col">
-            <button type="submit" id="save" class="btn btn-lg btn-block btn-primary">Guadar salida</button>
+            <a href="{{ route('salidas.index') }}"><button type="button" id="back" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-arrow-left mr-3"></i>Regresar</button></a>
+          </div>
+          <div class="col">
+            <button type="submit" id="save" class="btn btn-lg btn-block btn-success"><i class="fas fa-check mr-3"></i>sGuadar salida</button>
           </div>
         </div>
       </form>
@@ -80,7 +83,7 @@
         $('#description').autocomplete({
           source: function (request, response) {
             $.ajax({
-              url: '{{ route("fetch.description") }}',
+              url: '{{ route("fetch.product") }}',
               type: 'GET',
               dataType: 'json',
               data: {
@@ -131,27 +134,8 @@
           });
         }
 
-        function navigate(keyCode, left = null, right = null, up = null, down = null) {
+        function navigate(keyCode, left = null, right = null) {
           switch(keyCode) {
-              case UP:
-                if (up != null) {
-                  if (up == 'employee') {
-                    $('#' + up).select2('focus');
-                  } else {
-                    $('#' + up).focus();
-                  }
-                }
-              break;
-
-              case DOWN:
-                if (down != null) {
-                  if (down == 'employee') {
-                    $('#' + down).select2('focus');
-                  } else {
-                    $('#' + down).focus();
-                  }
-                }
-              break;
 
               case LEFT:
                 if (left != null) {
@@ -180,14 +164,14 @@
         $('#date').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, null, 'code', null, 'employee');
+            navigate(e.which, null, 'code');
           }
         });
 
         $('#code').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'date', 'description', null, 'category');
+            navigate(e.which, 'date', 'description');
           } else {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(doneTypingCode, doneTypingTimer);
@@ -197,49 +181,56 @@
         $('#description').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'code', 'employee', null, 'quantity');
+            navigate(e.which, 'code', 'employee');
           }
         });
 
         $('#employee').next('.select2-container').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'description', 'quantity', 'date', 'observations');
+            navigate(e.which, 'description', 'quantity');
           }
         });
 
         $('#quantity').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'employee', 'unit', 'description', 'observations');
+            navigate(e.which, 'employee', 'unit');
           }
         });
 
         $('#unit').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'quantity', 'place', 'description', 'observations');
+            navigate(e.which, 'quantity', 'place');
           }
         });
 
         $('#place').keydown(function (e) {
-          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'unit', 'observations', 'description', 'observations');
+            navigate(e.which, 'unit', 'observations');
           }
         });
 
         $('#observations').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'place', 'save', 'employee', 'save');
+            navigate(e.which, 'place', 'back');
+          }
+        });
+
+        $('#back').keydown(function (e) {
+          if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'observations', 'save');
           }
         });
 
         $('#save').keydown(function (e) {
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == ENTER || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'observations', null, 'observations', null);
+            navigate(e.which, 'back', null);
           }
         });
 

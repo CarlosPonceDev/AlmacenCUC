@@ -30,7 +30,10 @@
         </div>
         <div class="row mt-4">
           <div class="col">
-            <button type="submit" id="save" class="btn btn-lg btn-block btn-primary">Guadar empleado</button>
+            <a href="{{ route('empleados.index') }}"><button type="button" id="back" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-arrow-left mr-3"></i>Regresar</button></a>
+          </div>
+          <div class="col">
+            <button type="submit" id="save" class="btn btn-lg btn-block btn-success"><i class="fas fa-check mr-3"></i>Guadar empleado</button>
           </div>
         </div>
       </form>
@@ -83,13 +86,19 @@
         $('#department').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'name', 'save');
+            navigate(e.which, 'name', 'back');
+          }
+        });
+        $('#back').keydown(function (e) {
+          if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
+            e.preventDefault();
+            navigate(e.which, 'department', 'save');
           }
         });
         $('#save').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
-            navigate(e.which, 'department', null);
+            navigate(e.which, 'back', null);
           }
         });
       }
