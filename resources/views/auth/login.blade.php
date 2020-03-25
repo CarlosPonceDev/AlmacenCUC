@@ -4,7 +4,12 @@
 	<div class="row justify-content-center">
 		<div class="col-lg-5">
 			<div class="card shadow-lg border-0 rounded-lg mt-5">
-				<div class="card-header"><h3 class="text-center font-weight-light my-4">Iniciar sesión</h3></div>
+				<div class="card-header">
+					<div class="d-flex justify-content-center">
+						<img src="{{ asset('img/udg-logo.png') }}" alt="udg-logo" class="img-fluid" width="80"><br>
+					</div>
+					<h3 class="text-center font-weight-light my-4">Iniciar sesión</h3>
+				</div>
 				<div class="card-body">
 					<form method="POST" action="{{ route('login') }}">
 						@csrf
