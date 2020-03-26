@@ -23,12 +23,14 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.12.1",
         "awesome-notifications": "^3.1.0",
         "datatables.net": "^1.10.20",
         "datatables.net-bs4": "^1.10.20",
         "datatables.net-dt": "^1.10.20",
-        "font-awesome": "^4.7.0",
+        "jquery-ui": "^1.12.1",
         "select2": "^4.0.13",
+        "select2-bootstrap-theme": "0.1.0-beta.10",
         "select2-theme-bootstrap4": "^0.2.0-beta.6",
         "acorn": ">=6.4.1",
         "minimist": ">=1.2.2"
