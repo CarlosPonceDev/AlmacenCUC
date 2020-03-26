@@ -29,6 +29,7 @@ Route::prefix('fetch')->group(function ()
   Route::get('product', 'FetchsController@product')->name('fetch.product');
   Route::get('employees', 'FetchsController@employees')->name('fetch.employees');
   Route::get('providers', 'FetchsController@providers')->name('fetch.providers');
+  Route::get('observations', 'FetchsController@observations')->name('fetch.observations');
 });
 Route::get('inventario/categoria/{category}', 'InventoryController@category')->name('inventario.category');
 Route::post('reparacion/delivery', 'RepairsController@delivery')->name('reparacion.delivery');

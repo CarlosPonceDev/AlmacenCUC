@@ -14,6 +14,11 @@ class ViewInventory extends Model
     |--------------------------------------------------------------------------
     */
 
+    public static function laratablesCustomObservations($product)
+    {
+        return view('inventory.components.observations', compact('product'))->render();
+    }
+
     public static function laratablesCustomAction($product)
     {
         return view('inventory.components.buttons', compact('product'))->render();

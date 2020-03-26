@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Employee;
+use App\Observation;
 use App\Product;
 use App\Provider;
 use Illuminate\Http\Request;
@@ -65,5 +66,15 @@ class FetchsController extends Controller
             ];
         }
         return response()->json($response);
+    }
+
+    public function observations(Request $request)
+    {
+        $observations = Observation::where('product_id', $request->input('id'))->orderBy('created_at', 'DESC')->get();
+        if ($observations->count() > 0) {
+            return response()->json($observations);
+        } else {
+            return null;
+        }
     }
 }

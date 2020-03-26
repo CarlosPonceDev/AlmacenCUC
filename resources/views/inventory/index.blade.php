@@ -45,8 +45,66 @@
   </div>
 @endsection
 
+@section('modals')
+<div class="modal fade" id="modal-observations" tabindex="-1" role="dialog" aria-labelledby="modal-observations-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-observations-label">Observaciones</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="observations"></div>
+      </div>
+      <div class="modal-footer">
+        <div class="col">
+          <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+
 @push('inline-scripts')
     <script>
+      function show(param) {
+        let id = $(param).data('id');
+        $.ajax({
+          method: 'GET',
+          url: "{{ route('fetch.observations') }}",
+          data: {
+            "_token": "{{ csrf_token() }}",
+            "id": id
+          },
+        }).done(function (observations) {
+          console.log(observations);
+          let html = '';
+          if (observations != '') {
+            html += '<ul class="list-group list-group-flush">';
+            $.each(observations, function (key, value) {
+              html += 
+                '<li class="list-group-item">' +
+                  '<div class="row">' +
+                    '<div class="col-2 border-right">' +
+                      '<strong>' + value.created_at.substring(0, 10) + '</strong>' +
+                    '</div>' +
+                    '<div class="col-10">' +
+                      value.description +
+                    '</div>' +
+                  '</div>' +
+                '</li>'
+            });
+            html += '</ul>';
+            $('#observations').html(html);
+          } else {
+            $('#observations').html('<h2>No tiene observaciones</h2>');
+          }
+          $('#modal-observations').modal('show');
+        });
+      }
       function destroy(param) {
         notifier.confirm(
           '¿Seguro que quieres eliminar este producto?',
@@ -76,7 +134,7 @@
             { name: 'entries' },
             { name: 'exits' },
             { name: 'initial_stock' },
-            { name: 'code' },
+            { name: 'observations', orderable: false, searchable: false },
             { name: 'action', orderable: false, searchable: false },
           ],
           language: language
