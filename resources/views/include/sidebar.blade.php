@@ -22,10 +22,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
         Inventario
       </a>
-      <a class="nav-link" href="{{ route('reportes.index') }}">
+      {{-- <a class="nav-link" href="{{ route('reportes.index') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
         Reportes
-      </a>
+      </a> --}}
       <a class="nav-link" href="{{ route('empleados.index') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-user-friends"></i></div>
         Empleados
