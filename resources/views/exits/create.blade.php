@@ -36,7 +36,7 @@
           </div>
           <div class="col-2">
             <label for="unit">Unidad:</label>
-            <select name="unit" id="unit" class="custom-select">
+            <select name="unit" id="unit" class="custom-select select2-tags">
               @foreach ($units as $unit)
                 <option value="{{ $unit->name }}">{{ $unit->description }}</option>
               @endforeach
@@ -139,7 +139,7 @@
 
               case LEFT:
                 if (left != null) {
-                  if (left == 'employee') {
+                  if (left == 'employee' || left == 'unit') {
                     $('#' + left).select2('focus');
                   } else {
                     $('#' + left).focus();
@@ -149,7 +149,7 @@
 
               case RIGHT: case TAB:
                 if (right != null) {
-                  if (right == 'employee') {
+                  if (right == 'employee' || right == 'unit') {
                     $('#' + right).select2('focus');
                   } else {
                     $('#' + right).focus();
@@ -199,7 +199,7 @@
           }
         });
 
-        $('#unit').keydown(function (e) {
+        $('#unit').next('.select2-container').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'quantity', 'place');

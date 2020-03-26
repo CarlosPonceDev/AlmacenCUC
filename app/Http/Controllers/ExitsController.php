@@ -52,6 +52,12 @@ class ExitsController extends Controller
         ]);
         $employee = Employee::where('id', $request->input('employee'))->first();
         $unit = Unit::where('name', $request->input('unit'))->first();
+        if (!$unit) {
+            $unit = new Unit();
+            $unit->name = replaceSpecialCharacters($request->input('unit'));
+            $unit->description = $request->input('unit');
+            $unit->save();
+        }
         $place = Place::where('name', $request->input('place'))->first();
         $category = Category::where('prefix', substr($request->input('code'), 0, 1))->first();
         if ($employee && $unit && $place && $category) {

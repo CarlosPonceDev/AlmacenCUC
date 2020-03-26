@@ -29,17 +29,17 @@
           </div>
           <div class="col-12 col-lg-3 mb-2">
             <label for="personal">Personal:</label>
-            <select name="personal" id="personal" class="custom-select">
+            <select name="personal" id="personal" class="custom-select select2-tags">
               @foreach ($personals as $personal)
-                <option value="{{ $personal->id }}" {{ $repair->personal->id == $personal->id ? 'active' : '' }}>{{ $personal->name }}</option>
+                <option value="{{ $personal->id }}" {{ $repair->personal->id == $personal->id ? 'selected' : '' }}>{{ $personal->name }}</option>
               @endforeach
             </select>
           </div>
           <div class="col-12 col-lg-3 mb-2">
             <label for="business">Empresa:</label>
-            <select name="business" id="business" class="custom-select">
+            <select name="business" id="business" class="custom-select select2-tags">
               @foreach ($businesses as $business)
-                <option value="{{ $business->id }}" {{ $repair->business->id == $business->id ? 'active' : '' }}>{{ $business->name }}</option>
+                <option value="{{ $business->id }}" {{ $repair->business->id == $business->id ? 'selected' : '' }}>{{ $business->name }}</option>
               @endforeach
             </select>
           </div>
@@ -83,15 +83,23 @@
         });
         function navigate(keyCode, left = null, right = null) {
           switch(keyCode) {
-              case LEFT:
+            case LEFT:
                 if (left != null) {
-                  $('#' + left).focus();
+                  if (left == 'personal' || left == 'business') {
+                    $('#' + left).select2('focus');
+                  } else {
+                    $('#' + left).focus();
+                  }
                 }
               break;
 
               case RIGHT: case TAB:
                 if (right != null) {
-                  $('#' + right).focus();
+                  if (right == 'personal' || right == 'business') {
+                    $('#' + right).select2('focus');
+                  } else {
+                    $('#' + right).focus();
+                  }
                 }
               break;
 
@@ -116,13 +124,13 @@
             navigate(e.which, 'id', 'personal');
           }
         });
-        $('#personal').keydown(function (e) {
+        $('#personal').next('.select2-container').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'description', 'business');
           }
         });
-        $('#business').keydown(function (e) {
+        $('#business').next('.select2-container').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'personal', 'reason');

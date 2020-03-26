@@ -15,13 +15,13 @@
         @csrf
         @method('PUT')
         <div class="row">
-          <div class="col-12 col-lg-8 mb-2">
+          <div class="col-12 col-lg-6 mb-2">
             <label for="name">Nombre:</label>
             <input type="text" name="name" id="name" value="{{ $employee->name }}" class="form-control" placeholder="Nombre..." autofocus>
           </div>
-          <div class="col-12 col-lg-4 mb-2">
+          <div class="col-12 col-lg-6 mb-2">
             <label for="department">Departamento:</label>
-            <select name="department" id="department" class="custom-select">
+            <select name="department" id="department" class="custom-select select2-tags">
               @foreach ($departments as $department)
                 <option value="{{ $department->name }}" {{ $employee->department->id == $department->id ? 'selected' : '' }}>{{ $department->description }}</option>
               @endforeach
@@ -64,13 +64,21 @@
           switch(keyCode) {
               case LEFT:
                 if (left != null) {
-                  $('#' + left).focus();
+                  if (left == 'department') {
+                    $('#' + left).select2('focus');
+                  } else {
+                    $('#' + left).focus();
+                  }
                 }
               break;
 
               case RIGHT: case TAB:
                 if (right != null) {
-                  $('#' + right).focus();
+                  if (right == 'department') {
+                    $('#' + right).select2('focus');
+                  } else {
+                    $('#' + right).focus();
+                  }
                 }
               break;
 
@@ -83,7 +91,7 @@
             navigate(e.which, null, 'department');
           }
         });
-        $('#department').keydown(function (e) {
+        $('#department').next('.select2-container').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'name', 'back');

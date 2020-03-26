@@ -54,6 +54,12 @@ class EntriesController extends Controller
         ]);
         $category = Category::where('name', $request->input('category'))->first();
         $unit = Unit::where('name', $request->input('unit'))->first();
+        if (!$unit) {
+            $unit = new Unit();
+            $unit->name = replaceSpecialCharacters($request->input('unit'));
+            $unit->description = $request->input('unit');
+            $unit->save();
+        }
         $place = Place::where('name', $request->input('place'))->first();
         $provider = Provider::where('id', $request->input('provider'))->first();
         if ($category && $unit && $place && $provider) {

@@ -61511,6 +61511,10 @@ window.$ = window.jQuery = jquery__WEBPACK_IMPORTED_MODULE_0___default.a;
 jquery__WEBPACK_IMPORTED_MODULE_0___default()('.select2').select2({
   theme: "bootstrap"
 });
+jquery__WEBPACK_IMPORTED_MODULE_0___default()('.select2-tags').select2({
+  theme: "bootstrap",
+  tags: true
+});
 var notifier = new awesome_notifications__WEBPACK_IMPORTED_MODULE_4___default.a();
 window.notifier = notifier;
 

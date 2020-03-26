@@ -18,5 +18,10 @@ $('.select2').select2({
   theme: "bootstrap"
 });
 
+$('.select2-tags').select2({
+  theme: "bootstrap",
+  tags: true
+});
+
 var notifier = new AWN();
 window.notifier = notifier;

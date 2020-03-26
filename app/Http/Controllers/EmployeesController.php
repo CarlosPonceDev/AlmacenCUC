@@ -39,9 +39,15 @@ class EmployeesController extends Controller
      */
     public function store(Request $request)
     {
+        if (preg_replace('/\s+/', '', $request->input('department')) == '') {
+            return abort('404');
+        }
         $department = Department::where('name', $request->input('department'))->first();
         if (!$department) {
-            return abort('404');
+            $department = new Department();
+            $department->name = replaceSpecialCharacters($request->input('department'));
+            $department->description = $request->input('department');
+            $department->save();
         }
 
         $employee = new Employee();
@@ -88,10 +94,16 @@ class EmployeesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (preg_replace('/\s+/', '', $request->input('department')) == '') {
+            return abort('404');
+        }
         $employee = Employee::find($id);
         $department = Department::where('name', $request->input('department'))->first();
-        if (!$department || !$employee) {
-            return abort('404');
+        if (!$department) {
+            $department = new Department();
+            $department->name = replaceSpecialCharacters($request->input('department'));
+            $department->description = $request->input('department');
+            $department->save();
         }
 
         $employee->name = $request->input('name');

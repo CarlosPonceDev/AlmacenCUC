@@ -45,14 +45,21 @@ class RepairsController extends Controller
             'date'          => 'required|date|date_format:Y-m-d',
             'id'            => 'required|string',
             'description'   => 'required|string',
-            'personal'      => 'required|numeric',
-            'business'      => 'required|numeric',
+            'personal'      => 'required',
+            'business'      => 'required',
             'reason'        => 'required|string',
         ]);
-        $personal = Personal::find($request->input('personal'));
-        $business = Business::find($request->input('business'));
-        if (!$personal || !$business) {
-            return abort('404');
+        $personal = Personal::where('id', $request->input('personal'))->orWhere('name', $request->input('personal'))->first();
+        if (!$personal) {
+            $personal = new Personal();
+            $personal->name = $request->input('personal');
+            $personal->save();
+        }
+        $business = Business::where('id', $request->input('business'))->orWhere('name', $request->input('business'))->first();
+        if (!$business) {
+            $business = new Business();
+            $business->name = $request->input('business');
+            $business->save();
         }
 
         $repair = new Repair();
@@ -111,15 +118,22 @@ class RepairsController extends Controller
             'date'          => 'required|date|date_format:Y-m-d',
             'id'            => 'required|string',
             'description'   => 'required|string',
-            'personal'      => 'required|numeric',
-            'business'      => 'required|numeric',
+            'personal'      => 'required',
+            'business'      => 'required',
             'reason'        => 'required|string',
         ]);
         $repair = Repair::find($id);
-        $personal = Personal::find($request->input('personal'));
-        $business = Business::find($request->input('business'));
-        if (!$repair || !$personal || !$business) {
-            return abort('404');
+        $personal = Personal::where('id', $request->input('personal'))->orWhere('name', $request->input('personal'))->first();
+        if (!$personal) {
+            $personal = new Personal();
+            $personal->name = $request->input('personal');
+            $personal->save();
+        }
+        $business = Business::where('id', $request->input('business'))->orWhere('name', $request->input('business'))->first();
+        if (!$business) {
+            $business = new Business();
+            $business->name = $request->input('business');
+            $business->save();
         }
 
         $repair->exit_date      = Carbon::parse($request->input('date'))->format('Y-m-d H:i:s');
