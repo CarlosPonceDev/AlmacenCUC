@@ -47,66 +47,71 @@ class MigrateExits extends Command
 
         $observation_id = null;
 
-        $salidas = $old->table('tbl_salidas')->get();
+        $all_salidas = $old->table('tbl_salidas')->get()->chunk('1000');
 
-        foreach ($salidas as $salida) {
-            $product = $mysql->table('products')->where('description', $salida->descripcion_producto)->first();
-            if (!$product) {
-                $lost[] = [
-                    'info'  => json_encode($salida),
-                    'table' => 'tbl_salidas'
-                ];
-            } else {
-                $unit = $mysql->table('units')->where('name', replaceSpecialCharacters($salida->unidad_salida))->first();
-                if (!$unit) {
-                    $unit_id = $mysql->table('units')->insertGetId([
-                        'name'          => replaceSpecialCharacters($salida->unidad_salida),
-                        'description'   => htmlspecialchars($salida->unidad_salida),
-                        'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
-                        'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
+        foreach ($all_salidas as $salidas) {
+            $observation_id = null;
+            $insertar = [];
+            $lost = [];
+            foreach ($salidas as $salida) {
+                $product = $mysql->table('products')->where('description', $salida->descripcion_producto)->first();
+                if (!$product) {
+                    $lost[] = [
+                        'info'  => json_encode($salida),
+                        'table' => 'tbl_salidas'
+                    ];
                 } else {
-                    $unit_id = $unit->id;
-                }
-
-                $place_id = $mysql->table('places')->where('name', replaceSpecialCharacters($salida->lugar))->first()->id;
-
-                if (preg_replace('/\s+/', '', $salida->observaciones) != '') {
-                    $observation_id = $mysql->table('observations')->insertGetId([
-                        'description'   => htmlspecialchars($salida->observaciones),
+                    $unit = $mysql->table('units')->where('name', replaceSpecialCharacters($salida->unidad_salida))->first();
+                    if (!$unit) {
+                        $unit_id = $mysql->table('units')->insertGetId([
+                            'name'          => replaceSpecialCharacters($salida->unidad_salida),
+                            'description'   => htmlspecialchars($salida->unidad_salida),
+                            'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+                            'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+                    } else {
+                        $unit_id = $unit->id;
+                    }
+    
+                    $place_id = $mysql->table('places')->where('name', replaceSpecialCharacters($salida->lugar))->first()->id;
+    
+                    if (preg_replace('/\s+/', '', $salida->observaciones) != '') {
+                        $observation_id = $mysql->table('observations')->insertGetId([
+                            'description'   => htmlspecialchars($salida->observaciones),
+                            'product_id'    => $product->id,
+                            'created_at'    => Carbon::parse($salida->fecha_salida)->format('Y-m-d H:i:s'),
+                            'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+                    }
+    
+                    $employee = $mysql->table('employees')->where('name', $salida->empleado)->first();
+                    if (!$employee) {
+                        $employee_id = $mysql->table('employees')->insertGetId([
+                            'name'          => htmlspecialchars($salida->empleado),
+                            'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+                            'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+                    } else {
+                        $employee_id = $employee->id;
+                    }
+    
+                    $insertar[] = [
+                        'date'          => $salida->fecha_salida,
+                        'quantity'      => $salida->cantidad_salida,
+                        'unit_id'       => $unit_id,
+                        'place_id'      => $place_id,
+                        'observation_id'=> $observation_id,
+                        'employee_id'   => $employee_id,
                         'product_id'    => $product->id,
-                        'created_at'    => Carbon::parse($salida->fecha_salida)->format('Y-m-d H:i:s'),
-                        'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-                }
-
-                $employee = $mysql->table('employees')->where('name', $salida->empleado)->first();
-                if (!$employee) {
-                    $employee_id = $mysql->table('employees')->insertGetId([
-                        'name'          => htmlspecialchars($salida->empleado),
+                        'user_id'       => $mysql->table('users')->first()->id,
                         'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-                } else {
-                    $employee_id = $employee->id;
+                    ];
                 }
-
-                $insertar[] = [
-                    'date'          => $salida->fecha_salida,
-                    'quantity'      => $salida->cantidad_salida,
-                    'unit_id'       => $unit_id,
-                    'place_id'      => $place_id,
-                    'observation_id'=> $observation_id,
-                    'employee_id'   => $employee_id,
-                    'product_id'    => $product->id,
-                    'user_id'       => $mysql->table('users')->first()->id,
-                    'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
-                    'updated_at'    => Carbon::now()->format('Y-m-d H:i:s')
-                ];
             }
+    
+            $mysql->table('exits')->insert($insertar);
+            $mysql->table('lostrecords')->insert($lost);
         }
-
-        $mysql->table('exits')->insert($insertar);
-        $mysql->table('lostrecords')->insert($lost);
     }
 }
