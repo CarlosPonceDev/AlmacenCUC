@@ -127,7 +127,10 @@
             if (typeof data == 'object' && data != null) {
               let product = data.product;
               $('#description').val(product.description); 
-              $('#unit').val(product.unit.name);
+              if (product.unit !== null) {
+                $('#unit').val(product.unit.name);
+                $('#unit').trigger('change');
+              }
             } else {
               $('#description').val(''); 
             }

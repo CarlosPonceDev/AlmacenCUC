@@ -156,7 +156,10 @@
               $('#description').val(product.description); 
               $('#category').val(product.category.name);
               $('#category').prop('disabled', true);
-              $('#unit').val(product.unit.name);
+              if (product.unit !== null) {
+                $('#unit').val(product.unit.name);
+                $('#unit').trigger('change');
+              }
               $('#minimum').val(product.inventory.minimum);
               $('#minimum').prop('disabled', true);
             } else {
