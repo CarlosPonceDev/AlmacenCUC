@@ -47,7 +47,7 @@
     <div class="card-header"><i class="fas fa-table mr-1"></i>Mínima</div>
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-bordered table-hover table-striped" id="table-minimum">
+        <table class="table table-sm table-bordered table-hover table-striped" id="table-minimum" width="100%">
           <thead class="thead-dark">
             <tr>
               <th>Código</th>

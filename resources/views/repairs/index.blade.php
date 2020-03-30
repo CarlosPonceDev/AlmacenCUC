@@ -18,7 +18,7 @@
     <div class="card-header"><i class="fas fa-table mr-1"></i>Reparaciones</div>
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-sm table-bordered table-hover table-striped" id="table-inventory">
+        <table class="table table-sm table-bordered table-hover table-striped" id="table-inventory" width="100%">
           <thead>
             <tr>
               <th>Fecha</th>
