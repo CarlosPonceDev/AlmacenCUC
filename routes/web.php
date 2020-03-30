@@ -22,6 +22,7 @@ Route::prefix('laratables')->group(function ()
   Route::get('employees', 'EmployeesController@laratables')->name('laratables.employees');
   Route::get('providers', 'ProvidersController@laratables')->name('laratables.providers');
   Route::get('repairs', 'RepairsController@laratables')->name('laratables.repairs');
+  Route::get('entries', 'EntriesController@laratables')->name('laratables.entries');
 });
 Route::prefix('fetch')->group(function ()
 {
@@ -30,6 +31,10 @@ Route::prefix('fetch')->group(function ()
   Route::get('employees', 'FetchsController@employees')->name('fetch.employees');
   Route::get('providers', 'FetchsController@providers')->name('fetch.providers');
   Route::get('observations', 'FetchsController@observations')->name('fetch.observations');
+});
+Route::prefix('reportes')->group(function ()
+{
+  Route::get('entradas', 'ReportsController@entries')->name('reports.entries');
 });
 Route::get('inventario/categoria/{category}', 'InventoryController@category')->name('inventario.category');
 Route::post('reparacion/delivery', 'RepairsController@delivery')->name('reparacion.delivery');

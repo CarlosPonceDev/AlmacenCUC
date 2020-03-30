@@ -6,10 +6,20 @@
         <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
         Inicio
       </a>
-      <a class="nav-link" href="{{ route('entradas.create') }}">
+      <div class="sb-sidenav-menu-heading">Módulos</div>
+      <a class="nav-link collapsed {{ Request::is('entradas') || Request::is('entradas/*') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="{{ Request::is('entradas') || Request::is('entradas/*') ? 'true' : 'false' }}" aria-controls="collapseLayouts">
+        <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>Entradas<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+      </a>
+      <div class="collapse {{ Request::is('entradas') || Request::is('entradas/*') ? 'show' : '' }}" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav">
+          <a class="nav-link" href="{{ route('entradas.index') }}">Ver todas las entradas</a>
+          <a class="nav-link" href="{{ route('entradas.create') }}">Crear entrada</a>
+        </nav>
+      </div>
+      {{-- <a class="nav-link" href="{{ route('entradas.create') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>
         Entradas
-      </a>
+      </a> --}}
       <a class="nav-link" href="{{ route('salidas.create') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
         Salidas
@@ -22,10 +32,10 @@
         <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
         Inventario
       </a>
-      {{-- <a class="nav-link" href="{{ route('reportes.index') }}">
+      <a class="nav-link" href="{{ route('reportes.index') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
         Reportes
-      </a> --}}
+      </a>
       <a class="nav-link" href="{{ route('empleados.index') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-user-friends"></i></div>
         Empleados
