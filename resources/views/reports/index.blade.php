@@ -29,24 +29,6 @@
       <div class="row mt-4">
         <div class="col">
           @component('reports.components.category-button', [
-            'icon'  => 'calendar-alt',
-            'name'  => 'Mensuales'
-          ])
-          @endcomponent
-        </div>
-      </div>
-      <div class="row mt-4">
-        <div class="col">
-          @component('reports.components.category-button', [
-            'icon'  => 'broom',
-            'name'  => 'Materiales'
-          ])
-          @endcomponent
-        </div>
-      </div>
-      <div class="row mt-4">
-        <div class="col">
-          @component('reports.components.category-button', [
             'icon'  => 'people-carry',
             'name'  => 'Proveedores',
             'modal' => 'providers'
