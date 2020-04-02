@@ -17,7 +17,7 @@
   <div class="card">
     <div class="card-header">
       <div class="d-flex justify-content-between align-items-center">
-        <span><i class="fas fa-table mr-1"></i>Entradas</span>
+        <span><i class="fas fa-table mr-1"></i>Proveedores</span>
         <button class="btn btn-success" data-toggle="modal" data-target="#modal-report"><i class="fas fa-file-excel mr-2"></i>Descargar</button>
       </div>
     </div>

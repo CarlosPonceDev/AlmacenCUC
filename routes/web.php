@@ -35,6 +35,7 @@ Route::prefix('fetch')->group(function ()
 });
 Route::prefix('reportes')->group(function ()
 {
+  Route::get('employees', 'ReportsController@employees')->name('reports.employees');
   Route::get('providers', 'ReportsController@providers')->name('reports.providers');
   Route::get('entries', 'ReportsController@entries')->name('reports.entries');
   Route::get('exits', 'ReportsController@exits')->name('reports.exits');

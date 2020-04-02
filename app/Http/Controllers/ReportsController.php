@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Employee;
 use App\Entry;
 use App\Exits;
+use App\Exports\EmployeesExport;
 use App\Exports\EntriesExport;
 use App\Exports\ExitsExport;
 use App\Exports\ProvidersExport;
@@ -59,11 +61,31 @@ class ReportsController extends Controller
             if (!$provider) {
                 return abort('404');
             }
-            $exits = Entry::where('provider_id', $provider->id)->whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
+            $entries = Entry::where('provider_id', $provider->id)->whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
         } else {
-            $exits = Entry::whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
+            $entries = Entry::whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
         }
         $today = Carbon::now()->format('Y-m-d_H-i-a_');
-        return Excel::download(new ProvidersExport($exits), $today.'proveedores.xlsx');
+        return Excel::download(new ProvidersExport($entries), $today.'proveedores.xlsx');
+    }
+
+    public function employees(Request $request)
+    {
+        $request->validate([
+            'start-date'    => 'required|date',
+            'end-date'      => 'required|date',
+            'employee'      => 'required',
+        ]);
+        if ($request->input('employee') != 'all') {
+            $employee = Employee::find($request->input('employee'));
+            if (!$employee) {
+                return abort('404');
+            }
+            $exits = Exits::where('employee_id', $employee->id)->whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
+        } else {
+            $exits = Exits::whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
+        }
+        $today = Carbon::now()->format('Y-m-d_H-i-a_');
+        return Excel::download(new EmployeesExport($exits), $today.'empleados.xlsx');
     }
 }
