@@ -4,7 +4,7 @@
   <div class="d-flex justify-content-between mb-3">
     <h1>Empleados</h1>
     <a href="{{ route('empleados.create') }}">
-      <button class="btn btn-lg btn-success btn-create">
+      <button class="btn btn-lg btn-primary btn-create">
         <i class="fas fa-plus mr-2"></i>Crear empleado
       </button>
     </a>
