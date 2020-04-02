@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Entry;
+use App\Exits;
 use App\Exports\EntriesExport;
+use App\Exports\ExitsExport;
 use App\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -30,5 +32,16 @@ class ReportsController extends Controller
         $entries = Entry::whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
         $today = Carbon::now()->format('Y-m-d_H-i-a_');
         return Excel::download(new EntriesExport($entries), $today.'entradas.xlsx');
+    }
+
+    public function exits(Request $request)
+    {
+        $request->validate([
+            'start-date'    => 'required|date',
+            'end-date'    => 'required|date'
+        ]);
+        $exits = Exits::whereBetween('date', [$request->input('start-date'), $request->input('end-date')])->orderBy('date', 'DESC')->get();
+        $today = Carbon::now()->format('Y-m-d_H-i-a_');
+        return Excel::download(new ExitsExport($exits), $today.'salidas.xlsx');
     }
 }

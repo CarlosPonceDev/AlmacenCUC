@@ -7,10 +7,10 @@
         Inicio
       </a>
       <div class="sb-sidenav-menu-heading">Módulos</div>
-      <a class="nav-link collapsed {{ Request::is('entradas') || Request::is('entradas/*') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="{{ Request::is('entradas') || Request::is('entradas/*') ? 'true' : 'false' }}" aria-controls="collapseLayouts">
+      <a class="nav-link collapsed {{ Request::is('entradas') || Request::is('entradas/*') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapse-entries" aria-expanded="{{ Request::is('entradas') || Request::is('entradas/*') ? 'true' : 'false' }}" aria-controls="collapse-entries">
         <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>Entradas<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
       </a>
-      <div class="collapse {{ Request::is('entradas') || Request::is('entradas/*') ? 'show' : '' }}" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+      <div class="collapse {{ Request::is('entradas') || Request::is('entradas/*') ? 'show' : '' }}" id="collapse-entries" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav">
           <a class="nav-link" href="{{ route('entradas.index') }}">Ver todas las entradas</a>
           <a class="nav-link" href="{{ route('entradas.create') }}">Crear entrada</a>
@@ -20,10 +20,19 @@
         <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>
         Entradas
       </a> --}}
-      <a class="nav-link" href="{{ route('salidas.create') }}">
+      <a class="nav-link collapsed {{ Request::is('salidas') || Request::is('salidas/*') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapse-salidas" aria-expanded="{{ Request::is('salidas') || Request::is('salidas/*') ? 'true' : 'false' }}" aria-controls="collapse-salidas">
+        <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>Salidas<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+      </a>
+      <div class="collapse {{ Request::is('salidas') || Request::is('salidas/*') ? 'show' : '' }}" id="collapse-salidas" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav">
+          <a class="nav-link" href="{{ route('salidas.index') }}">Ver todas las salidas</a>
+          <a class="nav-link" href="{{ route('salidas.create') }}">Crear entrada</a>
+        </nav>
+      </div>
+      {{-- <a class="nav-link" href="{{ route('salidas.create') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
         Salidas
-      </a>
+      </a> --}}
       <a class="nav-link" href="{{ route('categorias.index') }}">
         <div class="sb-nav-link-icon"><i class="fas fa-th"></i></div>
         Categorías

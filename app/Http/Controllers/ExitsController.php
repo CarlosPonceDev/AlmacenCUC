@@ -10,6 +10,7 @@ use App\Observation;
 use App\Product;
 use App\Unit;
 use Carbon\Carbon;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
 
 class ExitsController extends Controller
@@ -21,7 +22,7 @@ class ExitsController extends Controller
      */
     public function index()
     {
-        //
+        return view('exits.index');
     }
 
     /**
@@ -137,6 +138,43 @@ class ExitsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $exit = Exits::find($id);
+        if (!$exit) {
+            return abort('404');
+        }
+
+        $observation = Observation::find($exit->observation_id);
+        if ($observation) {
+            $observation->delete();
+        }
+
+        $exit->delete();
+
+        return redirect()->route('salidas.index')->with('status', 'Salida eliminada con éxito!');
+    }
+
+    public function laratables()
+    {
+        return Laratables::recordsOf(Exits::class, function ($query)
+        {
+            return $query
+            ->join('products', 'exits.product_id', 'products.id')
+            ->join('categories', 'products.category_id', 'categories.id')
+            ->join('units', 'exits.unit_id', 'units.id')
+            ->join('employees', 'exits.employee_id', 'employees.id')
+            ->join('places', 'exits.place_id', 'places.id')
+            ->leftJoin('observations', 'exits.observation_id', 'observations.id')
+            ->select([
+                'exits.*', 
+                'products.code',
+                'products.description',
+                'products.category_id',
+                'categories.prefix',
+                'units.description',
+                'employees.name',
+                'places.description',
+                'observations.description',
+            ]);
+        });
     }
 }

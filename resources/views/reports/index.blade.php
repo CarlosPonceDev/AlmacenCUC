@@ -20,7 +20,8 @@
         <div class="col">
           @component('reports.components.category-button', [
             'icon'  => 'sign-out-alt',
-            'name'  => 'Salidas'
+            'name'  => 'Salidas',
+            'link'  => 'salidas.index'
           ])
           @endcomponent
         </div>
