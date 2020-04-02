@@ -22,7 +22,8 @@ class ExitsController extends Controller
      */
     public function index()
     {
-        return view('exits.index');
+        $employees = Employee::all();
+        return view('exits.index', compact('employees'));
     }
 
     /**

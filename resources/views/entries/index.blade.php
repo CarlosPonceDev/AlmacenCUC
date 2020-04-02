@@ -68,7 +68,7 @@
                   <input type="date" class="form-control" name="end-date" id="end-date" value="{{ date('Y-m-d') }}">
                 </div>
               </div>
-              {{-- <div class="row mb-2">
+              <div class="row mb-2">
                 <div class="col">
                   <button type="button" class="btn btn-link" data-toggle="collapse" href="#collapse-advanced" role="button" aria-expanded="false" aria-controls="collapse-advanced">
                     Opciones de reporte avanzadas
@@ -78,18 +78,16 @@
               <div class="collapse" id="collapse-advanced">
                 <div class="card card-body">
                   <div class="row">
-                    <div class="col-12 col-md-4 mb-2">
-                      <label for="code">Código:</label>
-                      <input type="text" name="code" id="code" class="form-control">
-                    </div>
-                    <div class="col-12 col-md-8 mb-2">
-                      <label for="description">Descripción:</label>
-                      <input type="text" name="description" id="description" class="form-control">
+                    <div class="col-12 mb-2">
+                      <label for="product">Producto:</label>
+                      <select name="product" id="product" class="custom-select">
+                        <option value="all">-- Todos los productos --</option>
+                      </select>
                     </div>
                     <div class="col-12 mb-2">
                       <label for="provider">Proveedor:</label>
                       <select name="provider" id="provider" class="select2">
-                        <option value="">-- Seleccione el proveedor --</option>
+                        <option value="all">-- Todos los proveedores --</option>
                         @foreach ($providers as $provider)
                           <option value="{{ $provider->id }}">{{ $provider->name }}</option>
                         @endforeach
@@ -97,7 +95,7 @@
                     </div>
                   </div>
                 </div>
-              </div> --}}
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -132,6 +130,24 @@
         )
       };
       window.onload = function() {
+        $('#product').select2({
+          theme: 'bootstrap',
+          ajax: {
+            dataType: 'json',
+            url: '{{ route("fetch.select2.products") }}',
+            delay: 100,
+            data: function (params) {
+              return {
+                term: params.term
+              }
+            },
+            processResults: function (data, page) {
+              return {
+                results: data
+              }
+            }
+          }
+        });
         $('#table-entries').DataTable({
           serverSide: true,
           order: [[0, "desc"]],

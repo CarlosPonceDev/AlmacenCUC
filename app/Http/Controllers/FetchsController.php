@@ -7,6 +7,7 @@ use App\Employee;
 use App\Observation;
 use App\Product;
 use App\Provider;
+use App\ViewInventory;
 use Illuminate\Http\Request;
 
 class FetchsController extends Controller
@@ -76,5 +77,21 @@ class FetchsController extends Controller
         } else {
             return null;
         }
+    }
+
+    public function select2Products(Request $request)
+    {
+        $term = $request->input('term') ?: '';
+        $results = [];
+        if ($term == '') {
+            $results[] = ['id' => 'all', 'text' => '-- Todos los productos --'];
+        } else {
+            $products = ViewInventory::where('code', 'like', '%'.$term.'%')->orWhere('description', 'like', '%'.$term.'%')->get(['code', 'description']);
+            foreach ($products as $product) {
+                $results[] = ['id' => $product->code, 'text' => $product->code . ' - ' . $product->description];
+            }
+        }
+
+        return response()->json($results);
     }
 }
