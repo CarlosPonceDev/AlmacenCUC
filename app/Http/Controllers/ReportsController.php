@@ -26,7 +26,9 @@ class ReportsController extends Controller
      */
     public function index()
     {
-        return view('reports.index');
+        $providers = Provider::all();
+        $employees = Employee::all();
+        return view('reports.index', compact(['providers', 'employees']));
     }
 
     public function entries(Request $request)
