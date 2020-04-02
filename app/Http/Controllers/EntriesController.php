@@ -24,7 +24,8 @@ class EntriesController extends Controller
      */
     public function index()
     {
-        return view('entries.index');
+        $providers = Provider::all();
+        return view('entries.index', compact('providers'));
     }
 
     /**

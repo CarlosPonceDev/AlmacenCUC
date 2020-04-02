@@ -1,9 +1,15 @@
-@extends('layouts.app-sbadmin')
+@extends('layouts.app')
 
 @section('content')
-  <h1>Salida</h1>
+  <h1 class="mb-3">Crear salida</h1>
+
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{{ route('salidas.index') }}">Salidas</a></li>
+    <li class="breadcrumb-item active">Crear salida</li>
+  </ol>
 
   <div class="card w-100 mt-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Crear salida</div>
     <div class="card-body">
       <form action="{{ route('salidas.store') }}" method="post">
         @csrf

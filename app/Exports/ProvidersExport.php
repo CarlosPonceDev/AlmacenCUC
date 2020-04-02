@@ -6,7 +6,7 @@ use App\Entry;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class EntriesExport implements FromView
+class ProvidersExport implements FromView
 {
     private $entries = null;
 
@@ -21,7 +21,7 @@ class EntriesExport implements FromView
             $this->entries = Entry::all();
         }
 
-        return view('reports.entries', [
+        return view('reports.providers', [
             'entries' => $this->entries
         ]);
     }
