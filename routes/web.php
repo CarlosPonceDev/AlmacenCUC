@@ -35,7 +35,8 @@ Route::prefix('fetch')->group(function ()
 });
 Route::prefix('reportes')->group(function ()
 {
-  Route::get('entradas', 'ReportsController@entries')->name('reports.entries');
+  Route::get('providers', 'ReportsController@providers')->name('reports.providers');
+  Route::get('entries', 'ReportsController@entries')->name('reports.entries');
   Route::get('exits', 'ReportsController@exits')->name('reports.exits');
 });
 Route::get('inventario/categoria/{category}', 'InventoryController@category')->name('inventario.category');

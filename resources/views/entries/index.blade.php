@@ -18,7 +18,7 @@
     <div class="card-header">
       <div class="d-flex justify-content-between align-items-center">
         <span><i class="fas fa-table mr-1"></i>Entradas</span>
-        <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-report" target="_blank"><i class="fas fa-file-excel mr-2"></i>Descargar</button>
+        <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-report"><i class="fas fa-file-excel mr-2"></i>Descargar</button>
       </div>
     </div>
     <div class="card-body">
@@ -49,7 +49,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modal-report-label">Modal title</h5>
+          <h5 class="modal-title" id="modal-report-label">Reporte de entradas</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -134,6 +134,7 @@
       window.onload = function() {
         $('#table-entries').DataTable({
           serverSide: true,
+          order: [[0, "desc"]],
           ajax: "{{ route('laratables.entries') }}",
           columns: [
             { name: 'date' },
