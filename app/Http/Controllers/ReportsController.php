@@ -9,8 +9,10 @@ use App\Exports\EmployeesExport;
 use App\Exports\EntriesExport;
 use App\Exports\ExitsExport;
 use App\Exports\ProvidersExport;
+use App\Exports\RepairsExport;
 use App\Product;
 use App\Provider;
+use App\Repair;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -87,5 +89,17 @@ class ReportsController extends Controller
         }
         $today = Carbon::now()->format('Y-m-d_H-i-a_');
         return Excel::download(new EmployeesExport($exits), $today.'empleados.xlsx');
+    }
+
+    public function repairs(Request $request)
+    {
+        $request->validate([
+            'start-date'    => 'required|date',
+            'end-date'      => 'required|date',
+        ]);
+
+        $repairs = Repair::whereBetween('exit_date', [$request->input('start-date'), $request->input('end-date')])->orderBy('exit_date', 'DESC')->get();
+        $today = Carbon::now()->format('Y-m-d_H-i-a_');
+        return Excel::download(new RepairsExport($repairs), $today.'reparaciones.xlsx');
     }
 }

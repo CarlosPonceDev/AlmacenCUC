@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Employee;
+use App\Exits;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -18,7 +18,7 @@ class EmployeesExport implements FromView
     public function view(): View
     {
         if ($this->exits == null) {
-            $this->exits = Employee::all();
+            $this->exits = Exits::all();
         }
 
         return view('reports.employees', [

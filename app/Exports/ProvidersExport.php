@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Provider;
+use App\Entry;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -18,7 +18,7 @@ class ProvidersExport implements FromView
     public function view(): View
     {
         if ($this->entries == null) {
-            $this->entries = Provider::all();
+            $this->entries = Entry::all();
         }
 
         return view('reports.providers', [
