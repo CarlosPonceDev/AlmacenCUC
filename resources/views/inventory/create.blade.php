@@ -1,4 +1,4 @@
-@extends('layouts.app-sbadmin')
+@extends('layouts.app')
 
 @section('content')
   <h1 class="mb-3">Crear producto</h1>

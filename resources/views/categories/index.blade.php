@@ -1,18 +1,21 @@
-@extends('layouts.app-sbadmin')
+@extends('layouts.app')
 
 @section('content')
-  <h1>Categorías</h1>
+  <h1 class="mb-4">Categorías</h1>
 
-  <div class="w-100">
-    @foreach ($categories as $category)
-      <div class="row mt-4">
-        <div class="col">
-          @component('categories.components.category-button', [
-            'category'  => $category
-          ])
-          @endcomponent
+  <div class="card">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Categorias</div>
+    <div class="card-body">
+      @foreach ($categories as $category)
+        <div class="row mb-3">
+          <div class="col">
+            @component('categories.components.category-button', [
+              'category'  => $category
+            ])
+            @endcomponent
+          </div>
         </div>
-      </div>
-    @endforeach
+      @endforeach
+    </div>
   </div>
 @endsection

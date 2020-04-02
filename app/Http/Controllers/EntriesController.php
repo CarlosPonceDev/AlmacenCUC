@@ -12,6 +12,7 @@ use App\Observation;
 use App\Product;
 use App\ViewInventory;
 use Carbon\Carbon;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Http\Request;
 
 class EntriesController extends Controller
@@ -23,7 +24,8 @@ class EntriesController extends Controller
      */
     public function index()
     {
-        //
+        $providers = Provider::all();
+        return view('entries.index', compact('providers'));
     }
 
     /**
@@ -172,6 +174,43 @@ class EntriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $entry = Entry::find($id);
+        if (!$entry) {
+            return abort('404');
+        }
+
+        $observation = Observation::find($entry->observation_id);
+        if ($observation) {
+            $observation->delete();
+        }
+
+        $entry->delete();
+
+        return redirect()->route('entradas.index')->with('status', '¡Entrada eliminada con éxito!');
+    }
+
+    public function laratables()
+    {
+        return Laratables::recordsOf(Entry::class, function ($query)
+        {
+            return $query
+            ->join('products', 'entries.product_id', 'products.id')
+            ->join('categories', 'products.category_id', 'categories.id')
+            ->join('units', 'entries.unit_id', 'units.id')
+            ->join('providers', 'entries.provider_id', 'providers.id')
+            ->join('places', 'entries.place_id', 'places.id')
+            ->leftJoin('observations', 'entries.observation_id', 'observations.id')
+            ->select([
+                'entries.*', 
+                'products.code',
+                'products.description',
+                'products.category_id',
+                'categories.prefix',
+                'units.description',
+                'providers.name',
+                'places.description',
+                'observations.description',
+            ]);
+        });
     }
 }

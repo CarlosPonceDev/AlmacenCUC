@@ -1,9 +1,15 @@
-@extends('layouts.app-sbadmin')
+@extends('layouts.app')
 
 @section('content')
-  <h1>Entrada</h1>
+  <h1 class="mb-3">Crear entrada</h1>
+
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{{ route('entradas.index') }}">Entradas</a></li>
+    <li class="breadcrumb-item active">Crear entrada</li>
+  </ol>
 
   <div class="card w-100 mt-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Crear entrada</div>
     <div class="card-body">
       <form action="{{ route('entradas.store') }}" method="post">
         @csrf
@@ -156,7 +162,10 @@
               $('#description').val(product.description); 
               $('#category').val(product.category.name);
               $('#category').prop('disabled', true);
-              $('#unit').val(product.unit.name);
+              if (product.unit !== null) {
+                $('#unit').val(product.unit.name);
+                $('#unit').trigger('change');
+              }
               $('#minimum').val(product.inventory.minimum);
               $('#minimum').prop('disabled', true);
             } else {

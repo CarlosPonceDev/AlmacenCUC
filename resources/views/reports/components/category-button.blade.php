@@ -1,4 +1,4 @@
-<button class="btn btn-block border btn-lg">
+<a href="{{ isset($link) ? route($link) : '#' }}" class="btn btn-block border btn-lg" {!! isset($modal) ? 'data-toggle="modal" data-target="#modal-' . $modal . '"' : ''!!}>
   <div class="row">
     <div class="col-2 border-right">
       <i class="fas fa-{{ $icon }} fa-4x"></i>
@@ -7,4 +7,4 @@
       <h1>{{ $name }}</h1>
     </div>
   </div>
-</button>
+</a>
