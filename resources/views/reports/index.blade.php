@@ -1,4 +1,4 @@
-@extends('layouts.app-sbadmin')
+@extends('layouts.app')
 
 @section('content')
   <h1>Reportes</h1>
