@@ -8,11 +8,13 @@ use App\Exits;
 use App\Exports\EmployeesExport;
 use App\Exports\EntriesExport;
 use App\Exports\ExitsExport;
+use App\Exports\InventoryExport;
 use App\Exports\ProvidersExport;
 use App\Exports\RepairsExport;
 use App\Product;
 use App\Provider;
 use App\Repair;
+use App\ViewInventory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -103,5 +105,12 @@ class ReportsController extends Controller
         $repairs = Repair::whereBetween('exit_date', [$request->input('start-date'), $request->input('end-date')])->orderBy('exit_date', 'DESC')->get();
         $today = Carbon::now()->format('Y-m-d_H-i-a_');
         return Excel::download(new RepairsExport($repairs), $today.'reparaciones.xlsx');
+    }
+
+    public function inventory()
+    {
+        $inventory = ViewInventory::all();
+        $today = Carbon::now()->format('Y-m-d_H-i-a_');
+        return Excel::download(new InventoryExport($inventory), $today.'reparaciones.xlsx');
     }
 }

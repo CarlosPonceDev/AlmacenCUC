@@ -35,11 +35,12 @@ Route::prefix('fetch')->group(function ()
 });
 Route::prefix('reportes')->group(function ()
 {
-  Route::get('employees', 'ReportsController@employees')->name('reports.employees');
-  Route::get('providers', 'ReportsController@providers')->name('reports.providers');
-  Route::get('repairs', 'ReportsController@repairs')->name('reports.repairs');
-  Route::get('entries', 'ReportsController@entries')->name('reports.entries');
-  Route::get('exits', 'ReportsController@exits')->name('reports.exits');
+  Route::get('inventario', 'ReportsController@inventory')->name('reports.inventory');
+  Route::get('empleados', 'ReportsController@employees')->name('reports.employees');
+  Route::get('proveedores', 'ReportsController@providers')->name('reports.providers');
+  Route::get('reparaciones', 'ReportsController@repairs')->name('reports.repairs');
+  Route::get('entradas', 'ReportsController@entries')->name('reports.entries');
+  Route::get('salidas', 'ReportsController@exits')->name('reports.exits');
 });
 Route::get('inventario/categoria/{category}', 'InventoryController@category')->name('inventario.category');
 Route::post('reparacion/delivery', 'RepairsController@delivery')->name('reparacion.delivery');

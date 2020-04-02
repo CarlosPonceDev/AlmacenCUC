@@ -4,7 +4,7 @@
   <div class="d-flex justify-content-between mb-3">
     <h1>Inventario{{ isset($category) ? ' - ' . $category->description : '' }}</h1>
     <a href="{{ route('inventario.create') }}">
-      <button class="btn btn-lg btn-success btn-create">
+      <button class="btn btn-lg btn-primary btn-create">
         <i class="fas fa-plus mr-2"></i>Crear producto
       </button>
     </a>
@@ -20,7 +20,12 @@
   </ol>
 
   <div class="card">
-    <div class="card-header"><i class="fas fa-table mr-1"></i>Inventario</div>
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <span><i class="fas fa-table mr-1"></i>Inventario</span>
+        <a href="{{ route('reports.inventory') }}" target="_blank" class="btn btn-success"><i class="fas fa-file-excel mr-2"></i>Descargar</a>
+      </div>
+    </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover table-striped" id="table-inventory" width="100%">
