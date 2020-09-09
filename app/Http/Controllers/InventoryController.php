@@ -69,6 +69,12 @@ class InventoryController extends Controller
             'minimum'       => 'required|numeric',
         ]);
         $unit = Unit::where('name', $request->input('unit'))->first();
+        if (!$unit) {
+            $unit = new Unit();
+            $unit->name = replaceSpecialCharacters($request->input('unit'));
+            $unit->description = $request->input('unit');
+            $unit->save();
+        }
         $place = Place::where('name', $request->input('place'))->first();
         $category = Category::where('name', $request->input('category'))->first();
         if ($unit && $place && $category) {

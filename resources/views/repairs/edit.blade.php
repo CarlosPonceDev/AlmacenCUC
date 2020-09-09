@@ -21,11 +21,12 @@
           </div>
           <div class="col-12 col-lg-3 mb-2">
             <label for="id">ID:</label>
-            <input type="text" name="id" id="id" class="form-control" value="{{ $repair->repair_id }}" autofocus>
+            <input type="text" name="id" id="id" class="form-control text-uppercase" value="{{ $repair->product->full_code }}" autofocus>
+            <input type="hidden" name="product-id" id="product-id" value="{{ $repair->product_id }}">
           </div>
           <div class="col-12 col-lg-6 mb-2">
             <label for="description">Descripción del producto:</label>
-            <input type="text" name="description" id="description" class="form-control" value="{{ $repair->description }}" autocomplete="off">
+            <input type="text" name="description" id="description" class="form-control" value="{{ $repair->product->description }}" autocomplete="off">
           </div>
           <div class="col-12 col-lg-3 mb-2">
             <label for="personal">Personal:</label>
@@ -65,6 +66,9 @@
 @push('inline-scripts')
     <script>
       window.onload = function(){
+        var $input = $('#id');
+        var doneTypingTimer = 1000;
+        var typingTimer;
         $('#description').autocomplete({
           source: function (request, response) {
             $.ajax({
@@ -79,8 +83,47 @@
                 response(data);
               }
             });
+          },
+          select: function (event, ui) {
+            let product = ui.item.product;
+            $('#id').val(product.category.prefix + product.code);
+            $('#product-id').val(product.id);
+          },
+          search: function (event, ui) {
+            if ($('#id').val('') != '') {
+              $('#id').val('');
+              $('#product-id').val('');
+            }
           }
         });
+
+        function doneTypingCode() {
+          $.ajax({
+            method: 'GET',
+            url: '{{ route("fetch.code") }}',
+            data: {
+              "_token": "{{ csrf_token() }}",
+              "code":   $input.val()
+            },
+            beforeSend: function () {
+              $("label[for=id]").append('<div class="spinner-border spinner-border-sm text-success" school="status"><span class="sr-only">Cargando...</span></div>');
+            },
+            complete: function () {
+              $("label[for=id] .spinner-border").remove();
+            }
+          })
+          .done(function (data) {
+            if (typeof data == 'object' && data != null) {
+              let product = data.product;
+              $('#description').val(product.description); 
+              $('#product-id').val(product.id);
+            } else {
+              $('#description').val('');
+              $('#product-id').val('');
+            }
+          });
+        }
+
         function navigate(keyCode, left = null, right = null) {
           switch(keyCode) {
             case LEFT:
@@ -116,6 +159,9 @@
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'date', 'description');
+          } else { 
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(doneTypingCode, doneTypingTimer);
           }
         });
         $('#description').keydown(function (e) {

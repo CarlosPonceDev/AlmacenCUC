@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Business;
 use App\Personal;
+use App\Product;
 use App\Repair;
 use Carbon\Carbon;
 use Freshbitsweb\Laratables\Laratables;
@@ -44,11 +45,13 @@ class RepairsController extends Controller
         $request->validate([
             'date'          => 'required|date|date_format:Y-m-d',
             'id'            => 'required|string',
+            'product-id'    => 'required',
             'description'   => 'required|string',
             'personal'      => 'required',
             'business'      => 'required',
             'reason'        => 'required|string',
         ]);
+        $product = Product::find($request->input('product-id'));
         $personal = Personal::where('id', $request->input('personal'))->orWhere('name', $request->input('personal'))->first();
         if (!$personal) {
             $personal = new Personal();
@@ -62,17 +65,21 @@ class RepairsController extends Controller
             $business->save();
         }
 
-        $repair = new Repair();
-
-        $repair->exit_date      = Carbon::parse($request->input('date'))->format('Y-m-d H:i:s');
-        $repair->repair_id      = $request->input('id');
-        $repair->description    = $request->input('description');
-        $repair->personal_id    = $personal->id;
-        $repair->business_id    = $business->id;
-        $repair->reason         = $request->input('reason');
-        $repair->user_id        = auth()->user()->id;
-
-        $repair->save();
+        if ($product && $personal && $business) {
+            $repair = new Repair();
+    
+            $repair->exit_date      = Carbon::parse($request->input('date'))->format('Y-m-d H:i:s');
+            $repair->description    = "";
+            $repair->product_id     = $product->id;
+            $repair->personal_id    = $personal->id;
+            $repair->business_id    = $business->id;
+            $repair->reason         = $request->input('reason');
+            $repair->user_id        = auth()->user()->id;
+    
+            $repair->save();
+        } else {
+            return abort('404');
+        }
 
         return redirect()->route('reparaciones.index')->with('status', '¡Reparación creada con éxito!');
     }
@@ -117,12 +124,14 @@ class RepairsController extends Controller
         $request->validate([
             'date'          => 'required|date|date_format:Y-m-d',
             'id'            => 'required|string',
+            'product-id'    => 'required',
             'description'   => 'required|string',
             'personal'      => 'required',
             'business'      => 'required',
             'reason'        => 'required|string',
         ]);
         $repair = Repair::find($id);
+        $product = Product::find($request->input('product-id'));
         $personal = Personal::where('id', $request->input('personal'))->orWhere('name', $request->input('personal'))->first();
         if (!$personal) {
             $personal = new Personal();
@@ -136,15 +145,19 @@ class RepairsController extends Controller
             $business->save();
         }
 
-        $repair->exit_date      = Carbon::parse($request->input('date'))->format('Y-m-d H:i:s');
-        $repair->repair_id      = $request->input('id');
-        $repair->description    = $request->input('description');
-        $repair->personal_id    = $personal->id;
-        $repair->business_id    = $business->id;
-        $repair->reason         = $request->input('reason');
-        $repair->user_id        = auth()->user()->id;
-
-        $repair->save();
+        if ($product && $personal && $business) {
+            $repair->exit_date      = Carbon::parse($request->input('date'))->format('Y-m-d H:i:s');
+            $repair->description    = "";
+            $repair->product_id     = $product->id;
+            $repair->personal_id    = $personal->id;
+            $repair->business_id    = $business->id;
+            $repair->reason         = $request->input('reason');
+            $repair->user_id        = auth()->user()->id;
+    
+            $repair->save();
+        } else {
+            return abort('404');
+        }
 
         return redirect()->route('reparaciones.index')->with('status', '¡Reparación editada con éxito!');
     }
@@ -185,7 +198,9 @@ class RepairsController extends Controller
         {
             return $query->join('personals', 'repairs.personal_id', '=', 'personals.id')
                         ->join('businesses', 'repairs.business_id', '=', 'businesses.id')
-                        ->select(['repairs.*', 'personals.name', 'businesses.name']);
+                        ->join('products',   'repairs.product_id',  '=', 'products.id')
+                        ->join('categories', 'products.category_id','=', 'categories.id')
+                        ->select(['repairs.*', 'personals.name', 'businesses.name', 'products.description', 'products.code', 'categories.prefix']);
         });
     }
 }

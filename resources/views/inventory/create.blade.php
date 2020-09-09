@@ -28,7 +28,7 @@
           </div>
           <div class="col-12 col-lg-4 mb-2">
             <label for="unit">Unidad:</label>
-            <select name="unit" id="unit" class="custom-select">
+            <select name="unit" id="unit" class="custom-select select2-tags">
               @foreach ($units as $unit)
                 <option value="{{ $unit->name }}">{{ $unit->description }}</option>
               @endforeach
@@ -95,13 +95,21 @@
           switch(keyCode) {
               case LEFT:
                 if (left != null) {
-                  $('#' + left).focus();
+                  if (left == 'unit') {
+                    $('#' + left).select2('focus');
+                  } else {
+                    $('#' + left).focus();
+                  }
                 }
               break;
 
               case RIGHT: case TAB:
                 if (right != null) {
-                  $('#' + right).focus();
+                  if (right == 'unit') {
+                    $('#' + right).select2('focus');
+                  } else {
+                    $('#' + right).focus();
+                  }
                 }
               break;
 
@@ -118,8 +126,6 @@
           if (e.which == LEFT || e.which == UP || e.which == RIGHT || e.which == DOWN || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'date', 'quantity');
-          } else {
-            $('#description').autocomplete('disabled');
           }
         });
         $('#quantity').keydown(function (e) {
@@ -128,7 +134,7 @@
             navigate(e.which, 'description', 'unit');
           }
         });
-        $('#unit').keydown(function (e) {
+        $('#unit').next('.select2-container').keydown(function (e) {
           if (e.which == LEFT || e.which == RIGHT || e.which == TAB) {
             e.preventDefault();
             navigate(e.which, 'quantity', 'minimum');
