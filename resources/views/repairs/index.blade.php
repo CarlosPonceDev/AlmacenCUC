@@ -171,7 +171,7 @@
           columns: [
             { name: 'exit_date' },
             { name: 'description' },
-            { name: 'repair_id' },
+            { name: 'full_code' },
             { name: 'reason' },
             { name: 'personal' },
             { name: 'business' },

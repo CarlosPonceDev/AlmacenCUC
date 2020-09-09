@@ -31,6 +31,12 @@ class Repair extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | LARATABLES
@@ -57,7 +63,7 @@ class Repair extends Model
 
     public static function laratablesAdditionalColumns()
     {
-        return ['personal', 'business'];
+        return ['personal', 'business', 'full_code'];
     }
 
     public static function laratablesCustomPersonal($repair)
@@ -88,5 +94,35 @@ class Repair extends Model
     public static function laratablesSearchBusiness($query, $searchValue)
     {
         return $query->orWhere('businesses.name', 'LIKE', '%' . $searchValue . '%');
+    }
+
+    public static function laratablesDescription($repair)
+    {
+        return $repair->product->description;
+    }
+
+    public static function laratablesOrderDescription()
+    {
+        return 'products.description';
+    }
+
+    public static function laratablesSearchDescription($query, $searchValue)
+    {
+        return $query->orWhere('products.description', 'LIKE', '%' . $searchValue . '%');
+    }
+
+    public static function laratablesCustomFullCode($repair)
+    {
+        return $repair->product->full_code;
+    }
+
+    public static function laratablesOrderRawFullCode($direction)
+    {
+        return 'categories.prefix ' . $direction . ', products.code ' . $direction;
+    }
+
+    public static function laratablesSearchFullCode($query, $searchValue)
+    {
+        return $query->orWhereRaw("CONCAT(categories.prefix, products.code) LIKE '%$searchValue%'");
     }
 }
