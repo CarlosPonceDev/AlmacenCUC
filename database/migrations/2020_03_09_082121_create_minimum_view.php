@@ -29,13 +29,13 @@ class CreateMinimumView extends Migration
             (
                 SELECT i.minimum
                 FROM inventory i
-                WHERE i.product_id = p.id
+                WHERE i.id = p.inventory_id
             ) AS minimum,
             (
                 (
                     SELECT i.initial_stock
                     FROM inventory i
-                    WHERE i.product_id = p.id
+                    WHERE i.id = p.inventory_id
                 ) +
                 (
                     SELECT IF(IFNULL(SUM(en.quantity), 0) = 0, 0, SUM(en.quantity))

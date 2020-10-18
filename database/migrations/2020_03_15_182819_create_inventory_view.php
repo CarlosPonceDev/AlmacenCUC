@@ -35,7 +35,7 @@ class CreateInventoryView extends Migration
                 (
                     SELECT i.initial_stock
                     FROM inventory i
-                    WHERE i.product_id = p.id
+                    WHERE i.id = p.inventory_id
                 ) +
                 (
                     SELECT IF(IFNULL(SUM(en.quantity), 0) = 0, 0, SUM(en.quantity))
@@ -123,7 +123,7 @@ class CreateInventoryView extends Migration
             (
                 SELECT i.initial_stock
                 FROM inventory i
-                WHERE i.product_id = p.id
+                WHERE i.id = p.inventory_id
             ) AS initial_stock
         FROM products p
         WHERE p.deleted_at IS NULL)");
